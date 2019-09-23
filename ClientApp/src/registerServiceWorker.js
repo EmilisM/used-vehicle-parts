@@ -18,10 +18,11 @@ const isLocalhost = Boolean(
   )
 );
 
-export default function register () {
-  if (window.process.env.NODE_ENV === "production" && "serviceWorker" in navigator) {
+export default function register() {
+// ReSharper disable UseOfImplicitGlobalInFunctionScope
+  if (process.env.NODE_ENV === "production" && "serviceWorker" in navigator) {
     // The URL constructor is available in all browsers that support SW.
-    const publicUrl = new URL(window.process.env.PUBLIC_URL, window.location);
+    const publicUrl = new URL(process.env.PUBLIC_URL, window.location);
     if (publicUrl.origin !== window.location.origin) {
       // Our service worker won't work if PUBLIC_URL is on a different origin
       // from what our page is served on. This might happen if a CDN is used to
@@ -29,21 +30,22 @@ export default function register () {
       return;
     }
 
-    window.addEventListener("load", () => {
-      const swUrl = `${window.process.env.PUBLIC_URL}/service-worker.js`;
-
-      if (isLocalhost) {
-        // This is running on localhost. Lets check if a service worker still exists or not.
-        checkValidServiceWorker(swUrl);
-      } else {
-        // Is not local host. Just register service worker
-        registerValidSw(swUrl);
-      }
-    });
+    window.addEventListener("load",
+      () => {
+        const swUrl = `${process.env.PUBLIC_URL}/service-worker.js`;
+        // ReSharper restore UseOfImplicitGlobalInFunctionScope
+        if (isLocalhost) {
+          // This is running on localhost. Lets check if a service worker still exists or not.
+          checkValidServiceWorker(swUrl);
+        } else {
+          // Is not local host. Just register service worker
+          registerValidSw(swUrl);
+        }
+      });
   }
 }
 
-function registerValidSw (swUrl) {
+function registerValidSw(swUrl) {
   navigator.serviceWorker
     .register(swUrl)
     .then(registration => {
@@ -72,14 +74,14 @@ function registerValidSw (swUrl) {
     });
 }
 
-function checkValidServiceWorker (swUrl) {
+function checkValidServiceWorker(swUrl) {
   // Check if the service worker can be found. If it can't reload the page.
   fetch(swUrl)
     .then(response => {
       // Ensure service worker exists, and that we really are getting a JS file.
       if (
         response.status === 404 ||
-        response.headers.get("content-type").indexOf("javascript") === -1
+          response.headers.get("content-type").indexOf("javascript") === -1
       ) {
         // No service worker found. Probably a different app. Reload the page.
         navigator.serviceWorker.ready.then(registration => {
@@ -99,7 +101,7 @@ function checkValidServiceWorker (swUrl) {
     });
 }
 
-export function unregister () {
+export function unregister() {
   if ("serviceWorker" in navigator) {
     navigator.serviceWorker.ready.then(registration => {
       registration.unregister();

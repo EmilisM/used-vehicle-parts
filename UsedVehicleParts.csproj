@@ -32,8 +32,6 @@
     <None Remove="ClientApp\build\index.html" />
     <None Remove="ClientApp\build\manifest.json" />
     <None Remove="ClientApp\build\service-worker.js" />
-    <None Remove="ClientApp\build\static\js\main.e7275167.js" />
-    <None Remove="ClientApp\build\static\js\main.e7275167.js.map" />
   </ItemGroup>
 
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">

@@ -12,11 +12,18 @@ namespace UsedVehicleParts
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
-
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration => { configuration.RootPath = "ClientApp/build"; });
 
             services.Configure<IISOptions>(options => options.ForwardClientCertificate = false);
+
+            services.AddSwaggerDocument(config =>
+            {
+                config.PostProcess = document =>
+                {
+                    document.Info.Title = "Used vehicle parts API";
+                };
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -34,12 +41,10 @@ namespace UsedVehicleParts
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
 
-            app.UseMvc(routes =>
-            {
-                routes.MapRoute(
-                    "default",
-                    "{controller}/{action=Index}/{id?}");
-            });
+            app.UseOpenApi();
+            app.UseSwaggerUi3();
+
+            app.UseMvc();
 
             app.UseSpa(spa =>
             {

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+using UsedVehicleParts.DAL;
 using UsedVehicleParts.Entities;
 
 namespace UsedVehicleParts.Controllers
@@ -10,25 +10,28 @@ namespace UsedVehicleParts.Controllers
     [ApiController]
     public class MakeController : ControllerBase
     {
-        private readonly UsedVehiclePartsContext _context;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public MakeController(UsedVehiclePartsContext context)
+        public MakeController(IUnitOfWork unitOfWork)
         {
-            _context = context;
+            _unitOfWork = unitOfWork;
         }
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Make>>> Get()
         {
-            return await _context.Make.ToListAsync();
+            var makes = await _unitOfWork.MakeRepository.Get();
+
+            return Ok(makes);
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<Make>> Get(int id)
         {
-            return await _context.Make.FindAsync(id);
-        }
+            var row = await _unitOfWork.MakeRepository.GetById(id);
 
+            return row == null ? (ActionResult<Make>) NotFound() : Ok(row);
+        }
 
         [HttpPost]
         public ActionResult Post([FromBody] string name)

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.Extensions.DependencyInjection;
+using UsedVehicleParts.DAL;
 using UsedVehicleParts.Entities;
 
 namespace UsedVehicleParts
@@ -29,6 +30,7 @@ namespace UsedVehicleParts
         private static void RegisterDependencies(IServiceCollection services)
         {
             services.AddSingleton<UsedVehiclePartsContext>();
+            services.AddTransient<IUnitOfWork, UnitOfWork>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

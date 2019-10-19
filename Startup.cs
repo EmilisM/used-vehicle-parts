@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.Extensions.DependencyInjection;
+using UsedVehicleParts.Entities;
 
 namespace UsedVehicleParts
 {
@@ -19,11 +20,15 @@ namespace UsedVehicleParts
 
             services.AddSwaggerDocument(config =>
             {
-                config.PostProcess = document =>
-                {
-                    document.Info.Title = "Used vehicle parts API";
-                };
+                config.PostProcess = document => { document.Info.Title = "Used vehicle parts API"; };
             });
+
+            RegisterDependencies(services);
+        }
+
+        private static void RegisterDependencies(IServiceCollection services)
+        {
+            services.AddSingleton<UsedVehiclePartsContext>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

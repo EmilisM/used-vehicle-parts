@@ -2,7 +2,7 @@
 
 namespace UsedVehicleParts.Entities
 {
-    public class UsedVehiclePartsContext : DbContext
+    public sealed class UsedVehiclePartsContext : DbContext
     {
         public UsedVehiclePartsContext()
         {
@@ -13,14 +13,14 @@ namespace UsedVehicleParts.Entities
         {
         }
 
-        public virtual DbSet<Image> Image { get; set; }
-        public virtual DbSet<Make> Make { get; set; }
-        public new virtual DbSet<Model> Model { get; set; }
-        public virtual DbSet<Part> Part { get; set; }
-        public virtual DbSet<PartClass> PartClass { get; set; }
-        public virtual DbSet<SpecificationValue> SpecificationValue { get; set; }
-        public virtual DbSet<Trim> Trim { get; set; }
-        public virtual DbSet<UserData> UserData { get; set; }
+        public DbSet<Image> Image { get; set; }
+        public DbSet<Make> Make { get; set; }
+        public new DbSet<Model> Model { get; set; }
+        public DbSet<Part> Part { get; set; }
+        public DbSet<PartClass> PartClass { get; set; }
+        public DbSet<SpecificationValue> SpecificationValue { get; set; }
+        public DbSet<Trim> Trim { get; set; }
+        public DbSet<UserData> UserData { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -36,9 +36,7 @@ namespace UsedVehicleParts.Entities
 
             modelBuilder.Entity<Image>(entity =>
             {
-                entity.Property(e => e.Id)
-                    .HasColumnName("ID")
-                    .ValueGeneratedNever();
+                entity.Property(e => e.Id).HasColumnName("ID");
 
                 entity.Property(e => e.ImageUrl)
                     .HasColumnName("ImageURL")
@@ -48,9 +46,7 @@ namespace UsedVehicleParts.Entities
 
             modelBuilder.Entity<Make>(entity =>
             {
-                entity.Property(e => e.Id)
-                    .HasColumnName("ID")
-                    .ValueGeneratedNever();
+                entity.Property(e => e.Id).HasColumnName("ID");
 
                 entity.Property(e => e.Name)
                     .HasMaxLength(255)
@@ -61,9 +57,7 @@ namespace UsedVehicleParts.Entities
 
             modelBuilder.Entity<Model>(entity =>
             {
-                entity.Property(e => e.Id)
-                    .HasColumnName("ID")
-                    .ValueGeneratedNever();
+                entity.Property(e => e.Id).HasColumnName("ID");
 
                 entity.Property(e => e.MakeId).HasColumnName("MakeID");
 
@@ -80,9 +74,7 @@ namespace UsedVehicleParts.Entities
 
             modelBuilder.Entity<Part>(entity =>
             {
-                entity.Property(e => e.Id)
-                    .HasColumnName("ID")
-                    .ValueGeneratedNever();
+                entity.Property(e => e.Id).HasColumnName("ID");
 
                 entity.Property(e => e.BuyerId).HasColumnName("BuyerID");
 
@@ -127,9 +119,7 @@ namespace UsedVehicleParts.Entities
 
             modelBuilder.Entity<PartClass>(entity =>
             {
-                entity.Property(e => e.Id)
-                    .HasColumnName("ID")
-                    .ValueGeneratedNever();
+                entity.Property(e => e.Id).HasColumnName("ID");
 
                 entity.Property(e => e.Name)
                     .HasMaxLength(255)
@@ -138,9 +128,7 @@ namespace UsedVehicleParts.Entities
 
             modelBuilder.Entity<SpecificationValue>(entity =>
             {
-                entity.Property(e => e.Id)
-                    .HasColumnName("ID")
-                    .ValueGeneratedNever();
+                entity.Property(e => e.Id).HasColumnName("ID");
 
                 entity.Property(e => e.Name)
                     .HasMaxLength(255)
@@ -161,9 +149,7 @@ namespace UsedVehicleParts.Entities
 
             modelBuilder.Entity<Trim>(entity =>
             {
-                entity.Property(e => e.Id)
-                    .HasColumnName("ID")
-                    .ValueGeneratedNever();
+                entity.Property(e => e.Id).HasColumnName("ID");
 
                 entity.Property(e => e.ModelId).HasColumnName("ModelID");
 
@@ -180,9 +166,7 @@ namespace UsedVehicleParts.Entities
 
             modelBuilder.Entity<UserData>(entity =>
             {
-                entity.Property(e => e.Id)
-                    .HasColumnName("ID")
-                    .ValueGeneratedNever();
+                entity.Property(e => e.Id).HasColumnName("ID");
 
                 entity.Property(e => e.ContactPhone)
                     .HasMaxLength(255)

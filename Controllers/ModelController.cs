@@ -1,6 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using UsedVehicleParts.Entities;
 
 namespace UsedVehicleParts.Controllers
 {
@@ -8,14 +10,17 @@ namespace UsedVehicleParts.Controllers
     [ApiController]
     public class ModelController : ControllerBase
     {
-        [HttpGet]
-        public ActionResult<IEnumerable<object>> Get()
+        private readonly UsedVehiclePartsContext _context;
+
+        public ModelController(UsedVehiclePartsContext context)
         {
-            return new object[]
-            {
-                new { ID = 0, Name = "CRX", ProductionYearFrom = DateTime.Now, ProductionYearTo = DateTime.Now },
-                new { ID = 1, Name = "CR-V", ProductionYearFrom = DateTime.Now, ProductionYearTo = DateTime.Now }
-            };
+            _context = context;
+        }
+
+        [HttpGet]
+        public async Task<ActionResult<object>> Get()
+        {
+            return await _context.Model.Include(model => model.Make).ToListAsync();
         }
 
         [HttpGet("{id}")]

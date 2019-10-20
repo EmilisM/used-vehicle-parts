@@ -1,8 +1,10 @@
+using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.Extensions.DependencyInjection;
+using UsedVehicleParts.Configuration;
 using UsedVehicleParts.DAL;
 using UsedVehicleParts.Entities;
 
@@ -23,6 +25,8 @@ namespace UsedVehicleParts
             {
                 config.PostProcess = document => { document.Info.Title = "Used vehicle parts API"; };
             });
+
+            services.AddAutoMapper(typeof(MappingProfile));
 
             RegisterDependencies(services);
         }

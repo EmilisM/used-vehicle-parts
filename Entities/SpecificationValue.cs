@@ -1,8 +1,7 @@
 ﻿namespace UsedVehicleParts.Entities
 {
-    public class SpecificationValue
+    public class SpecificationValue : Entity
     {
-        public int Id { get; set; }
         public string Name { get; set; }
         public string Value { get; set; }
         public string Units { get; set; }

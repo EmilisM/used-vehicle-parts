@@ -2,12 +2,11 @@
 
 namespace UsedVehicleParts.Entities
 {
-    public class Part
+    public class Part : Entity
     {
-        public int Id { get; set; }
         public string Name { get; set; }
         public DateTime? ProductionYearStart { get; set; }
-        public DateTime? PrductionYearEnd { get; set; }
+        public DateTime? ProductionYearEnd { get; set; }
         public string Manufacturer { get; set; }
         public string QualityGrade { get; set; }
         public int? Price { get; set; }

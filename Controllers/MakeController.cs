@@ -12,15 +12,18 @@ namespace UsedVehicleParts.Controllers
     {
         private readonly IUnitOfWork _unitOfWork;
 
+        private readonly Repository<Make> _makeRepository;
+
         public MakeController(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
+            _makeRepository = _unitOfWork.GetRepository<Make>();
         }
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Make>>> Get()
         {
-            var makes = await _unitOfWork.MakeRepository.Get();
+            var makes = await _makeRepository.Get();
 
             return Ok(makes);
         }
@@ -28,26 +31,57 @@ namespace UsedVehicleParts.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Make>> Get(int id)
         {
-            var row = await _unitOfWork.MakeRepository.GetById(id);
+            var row = await _makeRepository.GetById(id);
 
             return row == null ? (ActionResult<Make>) NotFound() : Ok(row);
         }
 
         [HttpPost]
-        public ActionResult Post([FromBody] string name)
+        public async Task<ActionResult> Post([FromBody] Make entity)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+
+            await _makeRepository.Create(entity);
+            await _unitOfWork.Save();
+
             return Ok();
         }
 
         [HttpPut("{id}")]
-        public ActionResult Put(int id, [FromBody] string value)
+        public async Task<ActionResult> Put(int id, [FromBody] Make entity)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+
+            var result = await _makeRepository.UpdateById(id, entity);
+
+            if (result == null)
+            {
+                return NotFound();
+            }
+
+            await _unitOfWork.Save();
+
             return Ok();
         }
 
         [HttpDelete("{id}")]
-        public ActionResult Delete(int id)
+        public async Task<ActionResult> Delete(int id)
         {
+            var result = await _makeRepository.Delete(id);
+
+            if (result == null)
+            {
+                return NotFound();
+            }
+
+            await _unitOfWork.Save();
+
             return Ok();
         }
     }

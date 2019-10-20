@@ -98,7 +98,7 @@ namespace UsedVehicleParts.Entities
                     .HasMaxLength(255)
                     .IsUnicode(false);
 
-                entity.Property(e => e.PrductionYearEnd).HasColumnType("date");
+                entity.Property(e => e.ProductionYearEnd).HasColumnType("date");
 
                 entity.Property(e => e.PriceUnits)
                     .HasMaxLength(255)

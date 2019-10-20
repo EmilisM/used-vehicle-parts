@@ -2,9 +2,8 @@
 
 namespace UsedVehicleParts.Entities
 {
-    public class Make
+    public class Make : Entity
     {
-        public int Id { get; set; }
         public string Name { get; set; }
         public DateTime? YearFounded { get; set; }
     }

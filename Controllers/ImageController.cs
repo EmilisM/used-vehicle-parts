@@ -1,5 +1,8 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using UsedVehicleParts.DAL;
+using UsedVehicleParts.Entities;
 
 namespace UsedVehicleParts.Controllers
 {
@@ -7,38 +10,77 @@ namespace UsedVehicleParts.Controllers
     [ApiController]
     public class ImageController : ControllerBase
     {
-        // GET: api/Image
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly IRepository<Image> _imageRepository;
+
+        public ImageController(IUnitOfWork unitOfWork)
+        {
+            _unitOfWork = unitOfWork;
+            _imageRepository = _unitOfWork.GetRepository<Image>();
+        }
+
         [HttpGet]
-        public ActionResult<IEnumerable<string>> Get()
+        public async Task<ActionResult<IEnumerable<Image>>> Get()
         {
-            return new[] { "value1", "value2" };
+            var makes = await _imageRepository.Get();
+
+            return Ok(makes);
         }
 
-        // GET: api/Image/5
-        [HttpGet("{id}", Name = "Get")]
-        public ActionResult<string> Get(int id)
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Image>> Get(int id)
         {
-            return Ok("value");
+            var row = await _imageRepository.GetById(id);
+
+            return row == null ? (ActionResult<Image>) NotFound() : Ok(row);
         }
 
-        // POST: api/Image
         [HttpPost]
-        public ActionResult Post([FromBody] string value)
+        public async Task<ActionResult> Post([FromBody] Image value)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+
+            await _imageRepository.Create(value);
+            await _unitOfWork.Save();
+
             return Ok();
         }
 
-        // PUT: api/Image/5
         [HttpPut("{id}")]
-        public ActionResult Put(int id, [FromBody] string value)
+        public async Task<ActionResult> Put(int id, [FromBody] Image value)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+
+            var result = await _imageRepository.UpdateById(id, value);
+
+            if (result == null)
+            {
+                return NotFound();
+            }
+
+            await _unitOfWork.Save();
+
             return Ok();
         }
 
-        // DELETE: api/ApiWithActions/5
         [HttpDelete("{id}")]
-        public ActionResult Delete(int id)
+        public async Task<ActionResult> Delete(int id)
         {
+            var result = await _imageRepository.Delete(id);
+
+            if (result == null)
+            {
+                return NotFound();
+            }
+
+            await _unitOfWork.Save();
+
             return Ok();
         }
     }

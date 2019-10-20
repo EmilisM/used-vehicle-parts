@@ -9,7 +9,7 @@ namespace UsedVehicleParts.DAL
     {
         Task<IEnumerable<TEntity>> Get(Expression<Func<TEntity, bool>> filter = null, string includeProperties = "");
 
-        Task<TEntity> GetById(int id);
+        Task<TEntity> GetById(int id, string includeProperties = "");
 
         Task Create(TEntity entity);
 

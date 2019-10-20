@@ -1,5 +1,8 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using UsedVehicleParts.DAL;
+using UsedVehicleParts.Entities;
 
 namespace UsedVehicleParts.Controllers
 {
@@ -7,33 +10,77 @@ namespace UsedVehicleParts.Controllers
     [ApiController]
     public class PartClassController : ControllerBase
     {
-        [HttpGet]
-        public ActionResult<IEnumerable<string>> Get()
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly IRepository<PartClass> _partClassRepository;
+
+        public PartClassController(IUnitOfWork unitOfWork)
         {
-            return new[] { "value1", "value2" };
+            _unitOfWork = unitOfWork;
+            _partClassRepository = _unitOfWork.GetRepository<PartClass>();
+        }
+
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<PartClass>>> Get()
+        {
+            var makes = await _partClassRepository.Get();
+
+            return Ok(makes);
         }
 
         [HttpGet("{id}")]
-        public ActionResult<string> Get(int id)
+        public async Task<ActionResult<PartClass>> Get(int id)
         {
-            return "value";
+            var row = await _partClassRepository.GetById(id);
+
+            return row == null ? (ActionResult<PartClass>) NotFound() : Ok(row);
         }
 
         [HttpPost]
-        public ActionResult Post([FromBody] string value)
+        public async Task<ActionResult> Post([FromBody] PartClass entity)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+
+            await _partClassRepository.Create(entity);
+            await _unitOfWork.Save();
+
             return Ok();
         }
 
         [HttpPut("{id}")]
-        public ActionResult Put(int id, [FromBody] string value)
+        public async Task<ActionResult> Put(int id, [FromBody] PartClass entity)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+
+            var result = await _partClassRepository.UpdateById(id, entity);
+
+            if (result == null)
+            {
+                return NotFound();
+            }
+
+            await _unitOfWork.Save();
+
             return Ok();
         }
 
         [HttpDelete("{id}")]
-        public ActionResult Delete(int id)
+        public async Task<ActionResult> Delete(int id)
         {
+            var result = await _partClassRepository.Delete(id);
+
+            if (result == null)
+            {
+                return NotFound();
+            }
+
+            await _unitOfWork.Save();
+
             return Ok();
         }
     }

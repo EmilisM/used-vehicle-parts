@@ -11,8 +11,7 @@ namespace UsedVehicleParts.Controllers
     public class MakeController : ControllerBase
     {
         private readonly IUnitOfWork _unitOfWork;
-
-        private readonly Repository<Make> _makeRepository;
+        private readonly IRepository<Make> _makeRepository;
 
         public MakeController(IUnitOfWork unitOfWork)
         {

@@ -36,8 +36,16 @@ namespace UsedVehicleParts.DAL
             return await query.ToListAsync();
         }
 
-        public async Task<TEntity> GetById(int id)
+        public async Task<TEntity> GetById(int id, string includeProperties = "")
         {
+            string[] includePropertyList =
+                includeProperties.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+
+            foreach (var includeProperty in includePropertyList)
+            {
+                _dbSet.Include(includeProperty);
+            }
+
             return await _dbSet.FindAsync(id);
         }
 

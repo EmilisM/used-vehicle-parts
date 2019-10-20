@@ -1,7 +1,6 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+using UsedVehicleParts.DAL;
 using UsedVehicleParts.Entities;
 
 namespace UsedVehicleParts.Controllers
@@ -10,40 +9,77 @@ namespace UsedVehicleParts.Controllers
     [ApiController]
     public class ModelController : ControllerBase
     {
-        private readonly UsedVehiclePartsContext _context;
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly Repository<Model> _modelRepository;
 
-        public ModelController(UsedVehiclePartsContext context)
+        public ModelController(IUnitOfWork unitOfWork)
         {
-            _context = context;
+            _unitOfWork = unitOfWork;
+            _modelRepository = _unitOfWork.GetRepository<Model>();
         }
 
         [HttpGet]
-        public async Task<ActionResult<object>> Get()
+        public async Task<ActionResult<Model>> Get()
         {
-            return await _context.Model.Include(model => model.Make).ToListAsync();
+            var models = await _modelRepository.Get(null, "Make");
+
+            return Ok(models);
         }
 
         [HttpGet("{id}")]
-        public ActionResult<object> Get(int id)
+        public async Task<ActionResult<Model>> Get(int id)
         {
-            return new { ID = id, Name = "CRX", ProductionYearFrom = DateTime.Now, ProductionYearTo = DateTime.Now };
+            var row = await _modelRepository.GetById(id, "Make");
+
+            return row == null ? (ActionResult<Model>) NotFound() : Ok(row);
         }
 
         [HttpPost]
-        public ActionResult Post([FromBody] string value)
+        public async Task<ActionResult> Post([FromBody] Model entity)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+
+            await _modelRepository.Create(entity);
+            await _unitOfWork.Save();
+
             return Ok();
         }
 
         [HttpPut("{id}")]
-        public ActionResult Put(int id, [FromBody] string value)
+        public async Task<ActionResult> Put(int id, [FromBody] Model entity)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+
+            var result = await _modelRepository.UpdateById(id, entity);
+
+            if (result == null)
+            {
+                return NotFound();
+            }
+
+            await _unitOfWork.Save();
+
             return Ok();
         }
 
         [HttpDelete("{id}")]
-        public ActionResult Delete(int id)
+        public async Task<ActionResult> Delete(int id)
         {
+            var result = await _modelRepository.Delete(id);
+
+            if (result == null)
+            {
+                return NotFound();
+            }
+
+            await _unitOfWork.Save();
+
             return Ok();
         }
     }

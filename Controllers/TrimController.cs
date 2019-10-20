@@ -1,5 +1,8 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using UsedVehicleParts.DAL;
+using UsedVehicleParts.Entities;
 
 namespace UsedVehicleParts.Controllers
 {
@@ -7,33 +10,77 @@ namespace UsedVehicleParts.Controllers
     [ApiController]
     public class TrimController : ControllerBase
     {
-        [HttpGet]
-        public ActionResult<IEnumerable<string>> Get()
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly IRepository<Trim> _trimRepository;
+
+        public TrimController(IUnitOfWork unitOfWork)
         {
-            return new[] { "value1", "value2" };
+            _unitOfWork = unitOfWork;
+            _trimRepository = _unitOfWork.GetRepository<Trim>();
+        }
+
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<Trim>>> Get()
+        {
+            var makes = await _trimRepository.Get(null, "Model");
+
+            return Ok(makes);
         }
 
         [HttpGet("{id}")]
-        public ActionResult<string> Get(int id)
+        public async Task<ActionResult<Trim>> Get(int id)
         {
-            return "value";
+            var row = await _trimRepository.GetById(id, "Model");
+
+            return row == null ? (ActionResult<Trim>) NotFound() : Ok(row);
         }
 
         [HttpPost]
-        public ActionResult Post([FromBody] string value)
+        public async Task<ActionResult> Post([FromBody] Trim entity)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+
+            await _trimRepository.Create(entity);
+            await _unitOfWork.Save();
+
             return Ok();
         }
 
         [HttpPut("{id}")]
-        public ActionResult Put(int id, [FromBody] string value)
+        public async Task<ActionResult> Put(int id, [FromBody] Trim entity)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+
+            var result = await _trimRepository.UpdateById(id, entity);
+
+            if (result == null)
+            {
+                return NotFound();
+            }
+
+            await _unitOfWork.Save();
+
             return Ok();
         }
 
         [HttpDelete("{id}")]
-        public ActionResult Delete(int id)
+        public async Task<ActionResult> Delete(int id)
         {
+            var result = await _trimRepository.Delete(id);
+
+            if (result == null)
+            {
+                return NotFound();
+            }
+
+            await _unitOfWork.Save();
+
             return Ok();
         }
     }

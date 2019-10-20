@@ -1,11 +1,15 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 namespace UsedVehicleParts.Entities
 {
     public sealed class UsedVehiclePartsContext : DbContext
     {
-        public UsedVehiclePartsContext()
+        private readonly IConfiguration _configuration;
+
+        public UsedVehiclePartsContext(IConfiguration configuration)
         {
+            _configuration = configuration;
         }
 
         public UsedVehiclePartsContext(DbContextOptions<UsedVehiclePartsContext> options)
@@ -26,7 +30,7 @@ namespace UsedVehicleParts.Entities
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlServer("Data Source=(localdb)\\MSSQLLocalDB;Initial catalog=UsedVehicleParts");
+                optionsBuilder.UseSqlServer(_configuration.GetConnectionString("Main"));
             }
         }
 

@@ -7,9 +7,10 @@ namespace UsedVehicleParts.DAL
 {
     public interface IRepository<TEntity>
     {
-        Task<IEnumerable<TEntity>> Get(Expression<Func<TEntity, bool>> filter = null, string includeProperties = "");
+        Task<IEnumerable<TEntity>> Get(Expression<Func<TEntity, bool>> filter = null,
+            IEnumerable<string> includeProperties = null);
 
-        Task<TEntity> GetById(int id, string includeProperties = "");
+        Task<TEntity> GetById(int id, IEnumerable<string> includeProperties = null);
 
         Task Create(TEntity entity);
 

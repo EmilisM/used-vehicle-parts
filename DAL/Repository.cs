@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -21,29 +22,30 @@ namespace UsedVehicleParts.DAL
         }
 
         public async Task<IEnumerable<TEntity>> Get(Expression<Func<TEntity, bool>> filter = null,
-            string includeProperties = "")
+            IEnumerable<string> includeProperties = null)
         {
             IQueryable<TEntity> query = _dbSet;
 
             if (filter != null) query = query.Where(filter);
 
-            string[] includePropertyList =
-                includeProperties.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
-
-            query = includePropertyList.Aggregate(query,
-                (current, includeProperty) => current.Include(includeProperty));
+            if (includeProperties != null)
+            {
+                query = includeProperties.Aggregate(query,
+                    (current, includeProperty) => current.Include(includeProperty));
+            }
 
             return await query.ToListAsync();
         }
 
-        public async Task<TEntity> GetById(int id, string includeProperties = "")
+        public async Task<TEntity> GetById(int id, IEnumerable<string> includeProperties = null)
         {
-            string[] includePropertyList =
-                includeProperties.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
-
-            foreach (var includeProperty in includePropertyList)
+            // ReSharper disable once InvertIf
+            if (includeProperties != null)
             {
-                _dbSet.Include(includeProperty);
+                foreach (var includeProperty in includeProperties)
+                {
+                    _dbSet.Include(includeProperty);
+                }
             }
 
             return await _dbSet.FindAsync(id);

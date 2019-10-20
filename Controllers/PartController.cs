@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using UsedVehicleParts.DAL;
@@ -13,6 +14,12 @@ namespace UsedVehicleParts.Controllers
         private readonly IUnitOfWork _unitOfWork;
         private readonly IRepository<Part> _partRepository;
 
+        private readonly string[] _includeProperties =
+        {
+            nameof(Part.Buyer), nameof(Part.Image), nameof(Part.PartClass), nameof(Part.Seller),
+            nameof(Part.Trim)
+        };
+
         public PartController(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
@@ -22,7 +29,7 @@ namespace UsedVehicleParts.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Part>>> Get()
         {
-            var makes = await _partRepository.Get(null, "Buyer,Image,PartClass,Seller,Trim"); 
+            var makes = await _partRepository.Get(null, _includeProperties);
 
             return Ok(makes);
         }
@@ -30,7 +37,7 @@ namespace UsedVehicleParts.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Part>> Get(int id)
         {
-            var row = await _partRepository.GetById(id, "Buyer,Image,PartClass,Seller,Trim");
+            var row = await _partRepository.GetById(id, _includeProperties);
 
             return row == null ? (ActionResult<Part>) NotFound() : Ok(row);
         }

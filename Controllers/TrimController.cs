@@ -22,7 +22,7 @@ namespace UsedVehicleParts.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Trim>>> Get()
         {
-            var makes = await _trimRepository.Get(null, "Model");
+            var makes = await _trimRepository.Get(null, new[] { nameof(Trim.Model) });
 
             return Ok(makes);
         }
@@ -30,7 +30,7 @@ namespace UsedVehicleParts.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Trim>> Get(int id)
         {
-            var row = await _trimRepository.GetById(id, "Model");
+            var row = await _trimRepository.GetById(id, new[] { nameof(Trim.Model) });
 
             return row == null ? (ActionResult<Trim>) NotFound() : Ok(row);
         }

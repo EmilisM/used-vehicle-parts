@@ -21,7 +21,7 @@ namespace UsedVehicleParts.Controllers
         [HttpGet]
         public async Task<ActionResult<Model>> Get()
         {
-            var models = await _modelRepository.Get(null, "Make");
+            var models = await _modelRepository.Get(null, new[] { nameof(Model.Make) });
 
             return Ok(models);
         }
@@ -29,7 +29,7 @@ namespace UsedVehicleParts.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Model>> Get(int id)
         {
-            var row = await _modelRepository.GetById(id, "Make");
+            var row = await _modelRepository.GetById(id, new[] { nameof(Model.Make) });
 
             return row == null ? (ActionResult<Model>) NotFound() : Ok(row);
         }

@@ -1,8 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using UsedVehicleParts.DAL;
-using UsedVehicleParts.Entities;
+using UsedVehicleParts.Models;
+using UsedVehicleParts.Services;
 
 namespace UsedVehicleParts.Controllers
 {
@@ -10,76 +9,45 @@ namespace UsedVehicleParts.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly IRepository<UserData> _UserDataRepository;
+        private readonly IUserService _userService;
 
-        public UserController(IUnitOfWork unitOfWork)
+        public UserController(IUserService userService)
         {
-            _unitOfWork = unitOfWork;
-            _UserDataRepository = _unitOfWork.GetRepository<UserData>();
+            _userService = userService;
         }
 
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<UserData>>> Get()
-        {
-            var makes = await _UserDataRepository.Get();
-
-            return Ok(makes);
-        }
-
-        [HttpGet("{id}")]
-        public async Task<ActionResult<UserData>> Get(int id)
-        {
-            var row = await _UserDataRepository.GetById(id);
-
-            return row == null ? (ActionResult<UserData>) NotFound() : Ok(row);
-        }
-
-        [HttpPost]
-        public async Task<ActionResult> Post([FromBody] UserData entity)
+        [HttpPost("authenticate")]
+        public async Task<IActionResult> Authenticate([FromBody] LoginModel loginModel)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest();
             }
 
-            await _UserDataRepository.Create(entity);
-            await _unitOfWork.Save();
+            var user = await _userService.Authenticate(loginModel.Username, loginModel.Password);
+
+            if (user == null)
+            {
+                return BadRequest();
+            }
 
             return Ok();
         }
 
-        [HttpPut("{id}")]
-        public async Task<ActionResult> Put(int id, [FromBody] UserData entity)
+        [HttpPost("register")]
+        public async Task<ActionResult> Register([FromBody] LoginModel loginModel)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest();
             }
 
-            var result = await _UserDataRepository.UpdateById(id, entity);
+            var user = await _userService.Registrate(loginModel.Username, loginModel.Password);
 
-            if (result == null)
+            if (user == null)
             {
-                return NotFound();
+                return BadRequest("User with this username already exists");
             }
-
-            await _unitOfWork.Save();
-
-            return Ok();
-        }
-
-        [HttpDelete("{id}")]
-        public async Task<ActionResult> Delete(int id)
-        {
-            var result = await _UserDataRepository.Delete(id);
-
-            if (result == null)
-            {
-                return NotFound();
-            }
-
-            await _unitOfWork.Save();
 
             return Ok();
         }

@@ -14,8 +14,15 @@ namespace UsedVehicleParts.Services
             _cryptoServiceProvider = cryptoServiceProvider;
         }
 
-        public string GenerateSalt(int length = 32)
+        public const int DefaultLength = 32;
+
+        public string GenerateSalt(int length = DefaultLength)
         {
+            if (length <= 0)
+            {
+                length = DefaultLength;
+            }
+
             var randomBytes = new byte[length];
             _cryptoServiceProvider.GetBytes(randomBytes);
             var salt = Convert.ToBase64String(randomBytes);

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace UsedVehicleParts.Entities
+namespace UsedVehicleParts.DAL.Entities
 {
     public class Part : Entity
     {

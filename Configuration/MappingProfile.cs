@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using UsedVehicleParts.Entities;
+using UsedVehicleParts.DAL.Entities;
 
 namespace UsedVehicleParts.Configuration
 {

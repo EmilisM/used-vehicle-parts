@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
-namespace UsedVehicleParts.Entities
+namespace UsedVehicleParts.DAL.Entities
 {
     public sealed class UsedVehiclePartsContext : DbContext
     {

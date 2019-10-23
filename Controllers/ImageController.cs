@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using UsedVehicleParts.DAL;
-using UsedVehicleParts.Entities;
+using UsedVehicleParts.DAL.Entities;
 
 namespace UsedVehicleParts.Controllers
 {

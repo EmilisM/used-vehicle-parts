@@ -1,8 +1,11 @@
-﻿namespace UsedVehicleParts.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace UsedVehicleParts.Models
 {
     public class LoginModel
     {
-        public string Username { get; set; }
-        public string Password { get; set; }
+        [Required] public string Username { get; set; }
+
+        [Required] public string Password { get; set; }
     }
 }

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
-using UsedVehicleParts.Entities;
+using UsedVehicleParts.DAL.Entities;
 
 namespace UsedVehicleParts.DAL
 {

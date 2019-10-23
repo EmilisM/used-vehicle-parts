@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using UsedVehicleParts.DAL;
-using UsedVehicleParts.Entities;
+using UsedVehicleParts.DAL.Entities;
 
 namespace UsedVehicleParts.Services
 {
@@ -17,14 +18,15 @@ namespace UsedVehicleParts.Services
         private readonly Repository<UserData> _userRepository;
         private readonly IConfiguration _configuration;
         private readonly ICryptographicService _cryptographicService;
-
+        private readonly JwtSecurityTokenHandler _jwtSecurityTokenHandler;
 
         public UserService(IUnitOfWork unitOfWork, IConfiguration configuration,
-            ICryptographicService cryptographicService)
+            ICryptographicService cryptographicService, JwtSecurityTokenHandler jwtSecurityTokenHandler)
         {
             _unitOfWork = unitOfWork;
             _configuration = configuration;
             _cryptographicService = cryptographicService;
+            _jwtSecurityTokenHandler = jwtSecurityTokenHandler;
             _userRepository = unitOfWork.GetRepository<UserData>();
         }
 
@@ -36,36 +38,22 @@ namespace UsedVehicleParts.Services
 
             if (singleUser == null)
             {
-                return null;
+                throw new UsernameOrPasswordInvalidException();
             }
 
             var hash = _cryptographicService.GenerateHash(password, singleUser.PasswordSalt);
 
             if (hash != singleUser.PasswordHash)
             {
-                return null;
+                throw new UsernameOrPasswordInvalidException();
             }
 
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(_configuration["JWTSecret"]);
-            var tokenDescriptor = new SecurityTokenDescriptor
-            {
-                Subject = new ClaimsIdentity(new[]
-                {
-                    new Claim(ClaimTypes.Name, singleUser.Id.ToString()),
-                }),
-                Expires = DateTime.UtcNow.AddMinutes(30),
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key),
-                    SecurityAlgorithms.HmacSha256Signature)
-            };
+            var token = CreateJwtToken(singleUser.Id.ToString());
 
-            var token = tokenHandler.CreateToken(tokenDescriptor);
-            var tokenSerialized = tokenHandler.WriteToken(token);
-
-            return tokenSerialized;
+            return token;
         }
 
-        public async Task<string> CreateAuthentication(string username, string password)
+        public async Task<string> Registrate(string username, string password)
         {
             var user = await _userRepository.Get(data => data.Username == username);
 
@@ -73,7 +61,7 @@ namespace UsedVehicleParts.Services
 
             if (singleUser != null)
             {
-                return null;
+                throw new UsernameTakenException();
             }
 
             var salt = _cryptographicService.GenerateSalt();
@@ -89,7 +77,58 @@ namespace UsedVehicleParts.Services
             await _userRepository.Create(userData);
             await _unitOfWork.Save();
 
-            return "";
+            var createdUsers = await _userRepository.Get(userEntity => userEntity.Username == username);
+            var createdUser = createdUsers.FirstOrDefault();
+
+            if (createdUser == null)
+            {
+                throw new RegistrationException();
+            }
+
+            var token = CreateJwtToken(createdUser.Id.ToString());
+
+            return token;
+        }
+
+        public ClaimsIdentity CreateClaimsIdentity(string userId)
+        {
+            var claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.Name, userId)
+            };
+
+            var claimsIdentity = new ClaimsIdentity(claims);
+
+            return claimsIdentity;
+        }
+
+        public string CreateJwtToken(string userId, string algorithmType = SecurityAlgorithms.HmacSha256Signature,
+            double expiryInMinutes = 30)
+        {
+            var secret = _configuration["JWTSecret"];
+            if (secret == null)
+            {
+                return null;
+            }
+
+            var key = Encoding.ASCII.GetBytes(secret);
+            var symmetricSecurityKey = new SymmetricSecurityKey(key);
+
+            var claimsIdentity = CreateClaimsIdentity(userId);
+            var signingCredentials =
+                new SigningCredentials(symmetricSecurityKey, algorithmType);
+
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = claimsIdentity,
+                Expires = DateTime.UtcNow.AddMinutes(expiryInMinutes),
+                SigningCredentials = signingCredentials
+            };
+
+            var token = _jwtSecurityTokenHandler.CreateToken(tokenDescriptor);
+            var tokenSerialized = _jwtSecurityTokenHandler.WriteToken(token);
+
+            return tokenSerialized;
         }
     }
 }

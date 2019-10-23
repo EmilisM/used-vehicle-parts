@@ -5,7 +5,7 @@ using System.Linq.Expressions;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
-using UsedVehicleParts.Entities;
+using UsedVehicleParts.DAL.Entities;
 
 namespace UsedVehicleParts.DAL
 {

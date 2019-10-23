@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using UsedVehicleParts.DAL;
-using UsedVehicleParts.Entities;
+using UsedVehicleParts.DAL.Entities;
 using UsedVehicleParts.Models;
 using UsedVehicleParts.Services;
 
@@ -41,10 +41,18 @@ namespace UsedVehicleParts.Controllers
                 return NotFound();
             }
 
-            return Ok(user);
+            var userInfoModel = new UserInfoModel
+            {
+                Username = user.Username,
+                ContactPhone = user.ContactPhone,
+                Email = user.Email,
+                Reputation = user.Reputation
+            };
+
+            return Ok(userInfoModel);
         }
 
-        [HttpPost("authenticate")]
+        [HttpPost("authentication")]
         public async Task<IActionResult> Authenticate([FromBody] LoginModel loginModel)
         {
             if (!ModelState.IsValid)
@@ -52,32 +60,44 @@ namespace UsedVehicleParts.Controllers
                 return BadRequest();
             }
 
-            var token = await _userService.Authenticate(loginModel.Username, loginModel.Password);
-
-            if (token == null)
+            try
             {
-                return BadRequest();
-            }
+                var token = await _userService.Authenticate(loginModel.Username, loginModel.Password);
 
-            return Ok(new { token });
+                var tokenModel = new TokenModel(token);
+
+                return Ok(tokenModel);
+            }
+            catch (UsernameOrPasswordInvalidException)
+            {
+                return BadRequest(new ErrorResponseModel("Username or password is invalid"));
+            }
         }
 
-        [HttpPost("register")]
-        public async Task<ActionResult> Register([FromBody] LoginModel loginModel)
+        [HttpPost("registration")]
+        public async Task<IActionResult> Registrate([FromBody] LoginModel loginModel)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest();
             }
 
-            var user = await _userService.CreateAuthentication(loginModel.Username, loginModel.Password);
-
-            if (user == null)
+            try
             {
-                return BadRequest("User with this username already exists");
-            }
+                var token = await _userService.Registrate(loginModel.Username, loginModel.Password);
 
-            return Ok();
+                var tokenModel = new TokenModel(token);
+
+                return Ok(tokenModel);
+            }
+            catch (UsernameTakenException)
+            {
+                return BadRequest(new ErrorResponseModel("Username is taken"));
+            }
+            catch (RegistrationException)
+            {
+                return StatusCode(500);
+            }
         }
     }
 }

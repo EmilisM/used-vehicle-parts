@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using UsedVehicleParts.Entities;
+using UsedVehicleParts.DAL.Entities;
 
 namespace UsedVehicleParts.DAL
 {

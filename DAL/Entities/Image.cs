@@ -1,4 +1,4 @@
-﻿namespace UsedVehicleParts.Entities
+﻿namespace UsedVehicleParts.DAL.Entities
 {
     public class Image : Entity
     {

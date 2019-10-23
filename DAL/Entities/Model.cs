@@ -1,14 +1,14 @@
 ﻿using System;
 
-namespace UsedVehicleParts.Entities
+namespace UsedVehicleParts.DAL.Entities
 {
-    public class Trim : Entity
+    public class Model : Entity
     {
         public string Name { get; set; }
         public DateTime? ProductionYearFrom { get; set; }
         public DateTime? ProductionYearTo { get; set; }
-        public int ModelId { get; set; }
+        public int MakeId { get; set; }
 
-        public virtual Model Model { get; set; }
+        public virtual Make Make { get; set; }
     }
 }

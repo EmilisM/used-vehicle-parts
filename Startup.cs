@@ -1,3 +1,4 @@
+using System.IdentityModel.Tokens.Jwt;
 using System.Security.Cryptography;
 using System.Text;
 using AutoMapper;
@@ -11,7 +12,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using UsedVehicleParts.Configuration;
 using UsedVehicleParts.DAL;
-using UsedVehicleParts.Entities;
+using UsedVehicleParts.DAL.Entities;
 using UsedVehicleParts.Services;
 
 namespace UsedVehicleParts
@@ -67,10 +68,13 @@ namespace UsedVehicleParts
         private static void RegisterDependencies(IServiceCollection services)
         {
             services.AddSingleton<UsedVehiclePartsContext>();
-            services.AddTransient<IUnitOfWork, UnitOfWork>();
-            services.AddTransient<IUserService, UserService>();
-            services.AddScoped<RNGCryptoServiceProvider>();
-            services.AddScoped<ICryptographicService, CryptographicService>();
+
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddScoped<IUserService, UserService>();
+
+            services.AddTransient<RNGCryptoServiceProvider>();
+            services.AddTransient<ICryptographicService, CryptographicService>();
+            services.AddTransient<JwtSecurityTokenHandler>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

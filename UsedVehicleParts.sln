@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29306.81
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UsedVehicleParts", "UsedVehicleParts.csproj", "{158F2825-E36B-4483-A729-38FCFF0C018E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UsedVehicleParts", "UsedVehicleParts\UsedVehicleParts.csproj", "{158F2825-E36B-4483-A729-38FCFF0C018E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UsedVehicleParts.Tests", "UsedVehicleParts.Tests\UsedVehicleParts.Tests.csproj", "{6B99A7EE-FECE-4AF6-BEA7-D6930670333C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{158F2825-E36B-4483-A729-38FCFF0C018E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{158F2825-E36B-4483-A729-38FCFF0C018E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{158F2825-E36B-4483-A729-38FCFF0C018E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6B99A7EE-FECE-4AF6-BEA7-D6930670333C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6B99A7EE-FECE-4AF6-BEA7-D6930670333C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6B99A7EE-FECE-4AF6-BEA7-D6930670333C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6B99A7EE-FECE-4AF6-BEA7-D6930670333C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

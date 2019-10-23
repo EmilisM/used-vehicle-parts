@@ -1,5 +1,10 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Security.Claims;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using UsedVehicleParts.DAL;
+using UsedVehicleParts.Entities;
 using UsedVehicleParts.Models;
 using UsedVehicleParts.Services;
 
@@ -10,10 +15,33 @@ namespace UsedVehicleParts.Controllers
     public class UserController : ControllerBase
     {
         private readonly IUserService _userService;
+        private readonly Repository<UserData> _userRepository;
 
-        public UserController(IUserService userService)
+        public UserController(IUserService userService, IUnitOfWork unitOfWork)
         {
             _userService = userService;
+            _userRepository = unitOfWork.GetRepository<UserData>();
+        }
+
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> Get()
+        {
+            var userId = HttpContext.User.Claims.FirstOrDefault(claim => claim.Type == ClaimTypes.Name);
+
+            if (userId == null)
+            {
+                return BadRequest();
+            }
+
+            var user = await _userRepository.GetById(userId.Value);
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(user);
         }
 
         [HttpPost("authenticate")]
@@ -24,14 +52,14 @@ namespace UsedVehicleParts.Controllers
                 return BadRequest();
             }
 
-            var user = await _userService.Authenticate(loginModel.Username, loginModel.Password);
+            var token = await _userService.Authenticate(loginModel.Username, loginModel.Password);
 
-            if (user == null)
+            if (token == null)
             {
                 return BadRequest();
             }
 
-            return Ok();
+            return Ok(new { token });
         }
 
         [HttpPost("register")]
@@ -42,7 +70,7 @@ namespace UsedVehicleParts.Controllers
                 return BadRequest();
             }
 
-            var user = await _userService.Registrate(loginModel.Username, loginModel.Password);
+            var user = await _userService.CreateAuthentication(loginModel.Username, loginModel.Password);
 
             if (user == null)
             {

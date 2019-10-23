@@ -12,6 +12,8 @@ namespace UsedVehicleParts.DAL
 
         Task<TEntity> GetById(int id, IEnumerable<string> includeProperties = null);
 
+        Task<TEntity> GetById(string id, IEnumerable<string> includeProperties = null);
+
         Task Create(TEntity entity);
 
         Task<TEntity> UpdateById(int id, TEntity entity);

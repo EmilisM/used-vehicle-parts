@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using UsedVehicleParts.DAL;
 using UsedVehicleParts.Entities;
@@ -20,6 +21,7 @@ namespace UsedVehicleParts.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public async Task<ActionResult<IEnumerable<PartClass>>> Get()
         {
             var makes = await _partClassRepository.Get();
@@ -28,6 +30,7 @@ namespace UsedVehicleParts.Controllers
         }
 
         [HttpGet("{id}")]
+        [AllowAnonymous]
         public async Task<ActionResult<PartClass>> Get(int id)
         {
             var row = await _partClassRepository.GetById(id);
@@ -36,6 +39,7 @@ namespace UsedVehicleParts.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<ActionResult> Post([FromBody] PartClass entity)
         {
             if (!ModelState.IsValid)
@@ -50,6 +54,7 @@ namespace UsedVehicleParts.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize]
         public async Task<ActionResult> Put(int id, [FromBody] PartClass entity)
         {
             if (!ModelState.IsValid)
@@ -70,6 +75,7 @@ namespace UsedVehicleParts.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize]
         public async Task<ActionResult> Delete(int id)
         {
             var result = await _partClassRepository.Delete(id);

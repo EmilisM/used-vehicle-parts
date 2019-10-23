@@ -36,6 +36,16 @@ namespace UsedVehicleParts.DAL
             return await query.ToListAsync();
         }
 
+        public async Task<TEntity> GetById(string id, IEnumerable<string> includeProperties = null)
+        {
+            if (int.TryParse(id, out var result))
+            {
+                return await GetById(result);
+            }
+
+            return null;
+        }
+
         public async Task<TEntity> GetById(int id, IEnumerable<string> includeProperties = null)
         {
             // ReSharper disable once InvertIf

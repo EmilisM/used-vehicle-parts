@@ -18,15 +18,13 @@ namespace UsedVehicleParts.Services
         private readonly Repository<UserData> _userRepository;
         private readonly IConfiguration _configuration;
         private readonly ICryptographicService _cryptographicService;
-        private readonly JwtSecurityTokenHandler _jwtSecurityTokenHandler;
 
         public UserService(IUnitOfWork unitOfWork, IConfiguration configuration,
-            ICryptographicService cryptographicService, JwtSecurityTokenHandler jwtSecurityTokenHandler)
+            ICryptographicService cryptographicService)
         {
             _unitOfWork = unitOfWork;
             _configuration = configuration;
             _cryptographicService = cryptographicService;
-            _jwtSecurityTokenHandler = jwtSecurityTokenHandler;
             _userRepository = unitOfWork.GetRepository<UserData>();
         }
 
@@ -48,7 +46,7 @@ namespace UsedVehicleParts.Services
                 throw new UsernameOrPasswordInvalidException();
             }
 
-            var token = CreateJwtToken(singleUser.Id.ToString());
+            var token = CreateJwtToken(singleUser.Id.ToString(), DateTime.Now.AddMinutes(30));
 
             return token;
         }
@@ -85,25 +83,13 @@ namespace UsedVehicleParts.Services
                 throw new RegistrationException();
             }
 
-            var token = CreateJwtToken(createdUser.Id.ToString());
+            var token = CreateJwtToken(createdUser.Id.ToString(), DateTime.Now.AddMinutes(30));
 
             return token;
         }
 
-        public ClaimsIdentity CreateClaimsIdentity(string userId)
-        {
-            var claims = new List<Claim>
-            {
-                new Claim(ClaimTypes.Name, userId)
-            };
-
-            var claimsIdentity = new ClaimsIdentity(claims);
-
-            return claimsIdentity;
-        }
-
-        public string CreateJwtToken(string userId, string algorithmType = SecurityAlgorithms.HmacSha256Signature,
-            double expiryInMinutes = 30)
+        public string CreateJwtToken(string userId, DateTime expiry,
+            string algorithmType = SecurityAlgorithms.HmacSha256Signature)
         {
             var secret = _configuration["JWTSecret"];
             if (secret == null)
@@ -114,21 +100,31 @@ namespace UsedVehicleParts.Services
             var key = Encoding.ASCII.GetBytes(secret);
             var symmetricSecurityKey = new SymmetricSecurityKey(key);
 
-            var claimsIdentity = CreateClaimsIdentity(userId);
+            var claims = CreateClaims(userId);
             var signingCredentials =
                 new SigningCredentials(symmetricSecurityKey, algorithmType);
 
-            var tokenDescriptor = new SecurityTokenDescriptor
-            {
-                Subject = claimsIdentity,
-                Expires = DateTime.UtcNow.AddMinutes(expiryInMinutes),
-                SigningCredentials = signingCredentials
-            };
+            var token = new JwtSecurityToken(claims: claims, expires: expiry,
+                signingCredentials: signingCredentials);
 
-            var token = _jwtSecurityTokenHandler.CreateToken(tokenDescriptor);
-            var tokenSerialized = _jwtSecurityTokenHandler.WriteToken(token);
+            var tokenSerialized = new JwtSecurityTokenHandler().WriteToken(token);
 
             return tokenSerialized;
+        }
+
+        public IEnumerable<Claim> CreateClaims(string userId)
+        {
+            if (string.IsNullOrWhiteSpace(userId))
+            {
+                throw new ArgumentNullException();
+            }
+
+            var claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.NameIdentifier, userId)
+            };
+
+            return claims;
         }
     }
 }

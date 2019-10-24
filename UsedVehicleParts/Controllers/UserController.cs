@@ -27,7 +27,7 @@ namespace UsedVehicleParts.Controllers
         [Authorize]
         public async Task<IActionResult> Get()
         {
-            var userId = HttpContext.User.Claims.FirstOrDefault(claim => claim.Type == ClaimTypes.Name);
+            var userId = HttpContext.User.Claims.FirstOrDefault(claim => claim.Type == ClaimTypes.NameIdentifier);
 
             if (userId == null)
             {

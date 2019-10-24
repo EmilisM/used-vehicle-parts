@@ -15,7 +15,7 @@ namespace UsedVehicleParts.Services
     public class UserService : IUserService
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly Repository<UserData> _userRepository;
+        private readonly IRepository<UserData> _userRepository;
         private readonly IConfiguration _configuration;
         private readonly ICryptographicService _cryptographicService;
 
@@ -30,9 +30,14 @@ namespace UsedVehicleParts.Services
 
         public async Task<string> Authenticate(string username, string password)
         {
+            if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password))
+            {
+                throw new UsernameOrPasswordInvalidException();
+            }
+
             var user = await _userRepository.Get(data => data.Username == username);
 
-            var singleUser = user.FirstOrDefault();
+            var singleUser = user?.FirstOrDefault();
 
             if (singleUser == null)
             {
@@ -53,9 +58,14 @@ namespace UsedVehicleParts.Services
 
         public async Task<string> Registrate(string username, string password)
         {
+            if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password))
+            {
+                throw new UsernameOrPasswordInvalidException();
+            }
+
             var user = await _userRepository.Get(data => data.Username == username);
 
-            var singleUser = user.FirstOrDefault();
+            var singleUser = user?.FirstOrDefault();
 
             if (singleUser != null)
             {
@@ -76,7 +86,7 @@ namespace UsedVehicleParts.Services
             await _unitOfWork.Save();
 
             var createdUsers = await _userRepository.Get(userEntity => userEntity.Username == username);
-            var createdUser = createdUsers.FirstOrDefault();
+            var createdUser = createdUsers?.FirstOrDefault();
 
             if (createdUser == null)
             {
@@ -91,10 +101,20 @@ namespace UsedVehicleParts.Services
         public string CreateJwtToken(string userId, DateTime expiry,
             string algorithmType = SecurityAlgorithms.HmacSha256Signature)
         {
+            if (string.IsNullOrWhiteSpace(userId))
+            {
+                throw new ArgumentNullException();
+            }
+
+            if (expiry <= DateTime.Now)
+            {
+                throw new ArgumentException();
+            }
+
             var secret = _configuration["JWTSecret"];
             if (secret == null)
             {
-                return null;
+                throw new ConfigurationMissingException();
             }
 
             var key = Encoding.ASCII.GetBytes(secret);

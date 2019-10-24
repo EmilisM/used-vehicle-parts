@@ -13,4 +13,8 @@ namespace UsedVehicleParts.Services
     public class RegistrationException : Exception
     {
     }
+
+    public class ConfigurationMissingException : Exception
+    {
+    }
 }

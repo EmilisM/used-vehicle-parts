@@ -11,7 +11,7 @@ namespace UsedVehicleParts.Controllers
     public class ModelController : ControllerBase
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly Repository<Model> _modelRepository;
+        private readonly IRepository<Model> _modelRepository;
 
         public ModelController(IUnitOfWork unitOfWork)
         {

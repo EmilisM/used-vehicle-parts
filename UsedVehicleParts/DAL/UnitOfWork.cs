@@ -18,7 +18,7 @@ namespace UsedVehicleParts.DAL
             _mapper = mapper;
         }
 
-        public Repository<TEntity> GetRepository<TEntity>() where TEntity : Entity
+        public IRepository<TEntity> GetRepository<TEntity>() where TEntity : Entity
         {
             if (_repositories == null)
             {

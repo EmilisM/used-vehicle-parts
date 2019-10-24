@@ -9,7 +9,7 @@ using UsedVehicleParts.DAL.Entities;
 
 namespace UsedVehicleParts.DAL
 {
-    public sealed class Repository<TEntity> : IRepository<TEntity> where TEntity : Entity
+    public class Repository<TEntity> : IRepository<TEntity> where TEntity : Entity
     {
         private readonly DbSet<TEntity> _dbSet;
         private readonly IMapper _mapper;

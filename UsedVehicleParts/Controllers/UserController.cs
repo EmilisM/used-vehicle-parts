@@ -15,7 +15,7 @@ namespace UsedVehicleParts.Controllers
     public class UserController : ControllerBase
     {
         private readonly IUserService _userService;
-        private readonly Repository<UserData> _userRepository;
+        private readonly IRepository<UserData> _userRepository;
 
         public UserController(IUserService userService, IUnitOfWork unitOfWork)
         {

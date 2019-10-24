@@ -32,15 +32,29 @@ namespace UsedVehicleParts.Services
 
         public string GenerateHash(string password, string saltInBase64)
         {
-            var saltBytes = Convert.FromBase64String(saltInBase64);
-            var passwordBytes = Encoding.UTF8.GetBytes(password);
+            if (string.IsNullOrEmpty(password) || password.Length < 8 || string.IsNullOrEmpty(saltInBase64))
+            {
+                return null;
+            }
 
-            var passwordSalted = passwordBytes.Concat(saltBytes).ToArray();
+            try
+            {
+                var saltBytes = Convert.FromBase64String(saltInBase64);
 
-            var hashBytes = SHA512.Create().ComputeHash(passwordSalted);
-            var hash = Convert.ToBase64String(hashBytes);
+                var passwordBytes = Encoding.UTF8.GetBytes(password);
 
-            return hash;
+                var passwordSalted = passwordBytes.Concat(saltBytes).ToArray();
+
+                var hashBytes = SHA512.Create().ComputeHash(passwordSalted);
+                var hash = Convert.ToBase64String(hashBytes);
+
+                return hash;
+            }
+            catch (FormatException)
+            {
+                return null;
+            }
+
         }
     }
 }

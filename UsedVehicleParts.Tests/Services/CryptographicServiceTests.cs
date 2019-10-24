@@ -23,9 +23,9 @@ namespace UsedVehicleParts.Tests.Services
         [TestCase(100)]
         public void CryptographicService_GenerateSalt_ReturnsCorrectLength(int length)
         {
-            var salt = _cryptographicService.GenerateSalt(length);
+            string salt = _cryptographicService.GenerateSalt(length);
 
-            var expectedLength = ExpectedSaltLength(length);
+            double expectedLength = ExpectedSaltLength(length);
 
             Assert.AreEqual(expectedLength, salt.Length);
         }
@@ -43,11 +43,73 @@ namespace UsedVehicleParts.Tests.Services
         [TestCase(-1)]
         public void CryptographicService_GenerateSalt_FallbackToDefaultOnNegativeOrZeroLength(int length)
         {
-            var salt = _cryptographicService.GenerateSalt(length);
+            string salt = _cryptographicService.GenerateSalt(length);
 
-            var expectedLength = ExpectedSaltLength(CryptographicService.DefaultLength);
+            double expectedLength = ExpectedSaltLength(CryptographicService.DefaultLength);
 
             Assert.AreEqual(expectedLength, salt.Length);
+        }
+
+        [Test]
+        public void CryptographicService_GenerateSalt_GeneratesUniqueSalts()
+        {
+            string salt = _cryptographicService.GenerateSalt();
+
+            string secondSalt = _cryptographicService.GenerateSalt();
+
+            Assert.AreNotEqual(salt, secondSalt);
+        }
+
+        [Test]
+        [TestCase(null)]
+        [TestCase("")]
+        public void CryptographicService_GenerateHash_HandlesNullOrEmptyPassword(string password)
+        {
+            const string salt = "c3RyaW5n";
+
+            string result = null;
+
+            Assert.DoesNotThrow(() => result = _cryptographicService.GenerateHash(password, salt));
+
+            Assert.AreEqual(null, result);
+        }
+
+        [Test]
+        [TestCase("1")]
+        [TestCase("123")]
+        [TestCase("1234567")]
+        public void CryptographicService_GenerateHash_HandlesShortPassword(string password)
+        {
+            const string salt = "c3RyaW5n";
+
+            string hash = _cryptographicService.GenerateHash(password, salt);
+
+            Assert.AreEqual(null, hash);
+        }
+
+        [Test]
+        [TestCase(null)]
+        [TestCase("")]
+        public void CryptographicService_GenerateHash_HandlesOnNullOrEmptySalt(string salt)
+        {
+            const string password = "randompassword";
+
+            string hash = null;
+
+            Assert.DoesNotThrow(() => hash = _cryptographicService.GenerateHash(password, salt));
+
+            Assert.AreEqual(null, hash);
+        }
+
+        [Test]
+        public void CryptographicService_GenerateHash_HandleSaltNotInBase64()
+        {
+            const string password = "randompassword";
+            const string salt = "randomsalt";
+
+            string hash = _cryptographicService.GenerateHash(password, salt);
+
+            Assert.AreEqual(null, hash);
         }
 
         private static double ExpectedSaltLength(int length)

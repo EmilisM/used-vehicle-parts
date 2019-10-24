@@ -82,6 +82,9 @@ namespace UsedVehicleParts.Tests.Services
         [TestCase("", "")]
         [TestCase(null, "")]
         [TestCase("", null)]
+        [TestCase("usr", "1234567")]
+        [TestCase(null, "1234567")]
+        [TestCase("123", null)]
         public void UserService_Authenticate_ThrowsOnEmptyOrNullPasswordOrUsername(string username, string password)
         {
             Assert.ThrowsAsync<UsernameOrPasswordInvalidException>(() => _userService.Authenticate(username, password));
@@ -130,6 +133,9 @@ namespace UsedVehicleParts.Tests.Services
         [TestCase("", "")]
         [TestCase(null, "")]
         [TestCase("", null)]
+        [TestCase("usr", "1234567")]
+        [TestCase(null, "1234567")]
+        [TestCase("123", null)]
         public void UserService_Registrate_ThrowsOnEmptyOrNullPasswordOrUsername(string username, string password)
         {
             Assert.ThrowsAsync<UsernameOrPasswordInvalidException>(() => _userService.Registrate(username, password));

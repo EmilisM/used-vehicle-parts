@@ -30,7 +30,7 @@ namespace UsedVehicleParts.Services
 
         public async Task<string> Authenticate(string username, string password)
         {
-            if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password))
+            if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password) || username.Length < 4 || password.Length < 8)
             {
                 throw new UsernameOrPasswordInvalidException();
             }
@@ -58,7 +58,7 @@ namespace UsedVehicleParts.Services
 
         public async Task<string> Registrate(string username, string password)
         {
-            if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password))
+            if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password) || username.Length < 4 || password.Length < 8)
             {
                 throw new UsernameOrPasswordInvalidException();
             }

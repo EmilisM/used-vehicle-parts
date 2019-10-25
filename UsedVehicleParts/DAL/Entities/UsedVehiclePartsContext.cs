@@ -19,7 +19,6 @@ namespace UsedVehicleParts.DAL.Entities
 
         public UsedVehiclePartsContext()
         {
-            
         }
 
         public DbSet<Image> Image { get; set; }

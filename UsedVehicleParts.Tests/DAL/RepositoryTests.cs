@@ -24,7 +24,7 @@ namespace UsedVehicleParts.Tests.DAL
         [TestCase("")]
         [TestCase(null)]
         [TestCase("-1")]
-        public async Task Repository_GetById_RetursNullOnInvalidStringId(string id)
+        public async Task Repository_GetById_ReturnsNullOnInvalidStringId(string id)
         {
             var repository = new Repository<Entity>(_context.Object, _mapper.Object);
 
@@ -35,7 +35,7 @@ namespace UsedVehicleParts.Tests.DAL
 
         [Test]
         [TestCase(-1)]
-        public async Task Repository_GetById_RetursNullOnInvalidIntId(int id)
+        public async Task Repository_GetById_ReturnsNullOnInvalidIntId(int id)
         {
             var repository = new Repository<Entity>(_context.Object, _mapper.Object);
 
@@ -46,7 +46,7 @@ namespace UsedVehicleParts.Tests.DAL
 
         [Test]
         [TestCase(-1)]
-        public async Task Repository_UpdateById_RetursNullOnInvalidId(int id)
+        public async Task Repository_UpdateById_ReturnsNullOnInvalidId(int id)
         {
             var repository = new Repository<Entity>(_context.Object, _mapper.Object);
 
@@ -58,7 +58,7 @@ namespace UsedVehicleParts.Tests.DAL
 
         [Test]
         [TestCase(-1)]
-        public async Task Repository_Delete_RetursNullOnInvalidId(int id)
+        public async Task Repository_Delete_ReturnsNullOnInvalidId(int id)
         {
             var repository = new Repository<Entity>(_context.Object, _mapper.Object);
 

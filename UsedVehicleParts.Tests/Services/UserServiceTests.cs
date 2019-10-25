@@ -34,13 +34,13 @@ namespace UsedVehicleParts.Tests.Services
         [Test]
         [TestCase("")]
         [TestCase(null)]
-        public void UserService_CreateClaimsIdentity_ThrowsOnNullOrEmptyUserId(string userId)
+        public void UserService_CreateClaims_ThrowsOnNullOrEmptyUserId(string userId)
         {
             Assert.Throws<ArgumentNullException>(() => _userService.CreateClaims(userId));
         }
 
         [Test]
-        public void UserService_CreateClaimsIdentity_SetsUserIdAsClaimTypeNameIdentifier()
+        public void UserService_CreateClaims_SetsUserIdAsClaimTypeNameIdentifier()
         {
             const string userId = "120";
             var claims = _userService.CreateClaims(userId).ToList();

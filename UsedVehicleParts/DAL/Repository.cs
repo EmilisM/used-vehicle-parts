@@ -38,7 +38,7 @@ namespace UsedVehicleParts.DAL
 
         public async Task<TEntity> GetById(string id, IEnumerable<string> includeProperties = null)
         {
-            if (int.TryParse(id, out var result))
+            if (int.TryParse(id, out var result) && result >= 0)
             {
                 return await GetById(result);
             }
@@ -48,6 +48,11 @@ namespace UsedVehicleParts.DAL
 
         public async Task<TEntity> GetById(int id, IEnumerable<string> includeProperties = null)
         {
+            if (id < 0)
+            {
+                return null;
+            }
+
             // ReSharper disable once InvertIf
             if (includeProperties != null)
             {
@@ -67,6 +72,11 @@ namespace UsedVehicleParts.DAL
 
         public async Task<TEntity> UpdateById(int id, TEntity entity)
         {
+            if (id < 0)
+            {
+                return null;
+            }
+
             var entry = await _dbSet.FindAsync(id);
 
             if (entry == null)
@@ -87,6 +97,11 @@ namespace UsedVehicleParts.DAL
 
         public async Task<TEntity> Delete(int id)
         {
+            if (id < 0)
+            {
+                return null;
+            }
+
             var entity = await _dbSet.FindAsync(id);
 
             if (entity == null)

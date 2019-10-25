@@ -3,7 +3,7 @@ using Microsoft.Extensions.Configuration;
 
 namespace UsedVehicleParts.DAL.Entities
 {
-    public sealed class UsedVehiclePartsContext : DbContext
+    public class UsedVehiclePartsContext : DbContext
     {
         private readonly IConfiguration _configuration;
 
@@ -15,6 +15,11 @@ namespace UsedVehicleParts.DAL.Entities
         public UsedVehiclePartsContext(DbContextOptions<UsedVehiclePartsContext> options)
             : base(options)
         {
+        }
+
+        public UsedVehiclePartsContext()
+        {
+            
         }
 
         public DbSet<Image> Image { get; set; }

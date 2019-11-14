@@ -35,7 +35,7 @@ namespace UsedVehicleParts.Controllers
         {
             var row = await _imageRepository.GetById(id);
 
-            return row == null ? (ActionResult<Image>) NotFound() : Ok(row);
+            return row == null ? (ActionResult<Image>)NotFound() : Ok(row);
         }
 
         [HttpPost]

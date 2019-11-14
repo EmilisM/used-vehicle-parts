@@ -7,14 +7,14 @@ namespace UsedVehicleParts.Services
 {
     public class CryptographicService : ICryptographicService
     {
+        public const int DefaultLength = 32;
+
         private readonly RNGCryptoServiceProvider _cryptoServiceProvider;
 
         public CryptographicService(RNGCryptoServiceProvider cryptoServiceProvider)
         {
             _cryptoServiceProvider = cryptoServiceProvider;
         }
-
-        public const int DefaultLength = 32;
 
         public string GenerateSalt(int length = DefaultLength)
         {
@@ -23,11 +23,18 @@ namespace UsedVehicleParts.Services
                 length = DefaultLength;
             }
 
-            var randomBytes = new byte[length];
-            _cryptoServiceProvider.GetBytes(randomBytes);
-            var salt = Convert.ToBase64String(randomBytes);
+            try
+            {
+                var randomBytes = new byte[length];
+                _cryptoServiceProvider.GetBytes(randomBytes);
+                var salt = Convert.ToBase64String(randomBytes);
 
-            return salt;
+                return salt;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
         }
 
         public string GenerateHash(string password, string saltInBase64)
@@ -54,7 +61,6 @@ namespace UsedVehicleParts.Services
             {
                 return null;
             }
-
         }
     }
 }

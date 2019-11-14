@@ -1,5 +1,6 @@
 ﻿using System;
 
+// ReSharper disable StyleCop.SA1402
 namespace UsedVehicleParts.Services
 {
     public class UsernameTakenException : Exception

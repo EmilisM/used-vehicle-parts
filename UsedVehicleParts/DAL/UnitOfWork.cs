@@ -29,7 +29,7 @@ namespace UsedVehicleParts.DAL
 
             if (_repositories.ContainsKey(repositoryName))
             {
-                return (IRepository<TEntity>) _repositories[repositoryName];
+                return (IRepository<TEntity>)_repositories[repositoryName];
             }
 
             var repository = new Repository<TEntity>(_context, _mapper);

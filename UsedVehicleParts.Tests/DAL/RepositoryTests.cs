@@ -4,7 +4,7 @@ using Moq;
 using NUnit.Framework;
 using UsedVehicleParts.DAL;
 using UsedVehicleParts.DAL.Entities;
-
+// ReSharper disable InconsistentNaming
 namespace UsedVehicleParts.Tests.DAL
 {
     [TestFixture]

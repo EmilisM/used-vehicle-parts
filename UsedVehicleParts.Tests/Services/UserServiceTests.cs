@@ -9,7 +9,7 @@ using NUnit.Framework;
 using UsedVehicleParts.DAL;
 using UsedVehicleParts.DAL.Entities;
 using UsedVehicleParts.Services;
-
+// ReSharper disable InconsistentNaming
 namespace UsedVehicleParts.Tests.Services
 {
     [TestFixture]
@@ -42,8 +42,8 @@ namespace UsedVehicleParts.Tests.Services
         [Test]
         public void UserService_CreateClaims_SetsUserIdAsClaimTypeNameIdentifier()
         {
-            const string userId = "120";
-            var claims = _userService.CreateClaims(userId).ToList();
+            const string UserId = "120";
+            var claims = _userService.CreateClaims(UserId).ToList();
 
             Assert.IsNotNull(claims);
             Assert.AreEqual(claims.Count, 1);
@@ -51,7 +51,7 @@ namespace UsedVehicleParts.Tests.Services
             var singleClaim = claims.FirstOrDefault(claim => claim.Type == ClaimTypes.NameIdentifier);
 
             Assert.IsNotNull(singleClaim);
-            Assert.AreEqual(singleClaim.Value, userId);
+            Assert.AreEqual(singleClaim.Value, UserId);
         }
 
         [Test]
@@ -120,7 +120,7 @@ namespace UsedVehicleParts.Tests.Services
                 }
             });
 
-            _cryptographicService.Setup(cryptoService => cryptoService.GenerateHash("", "")).Returns("onefour");
+            _cryptographicService.Setup(cryptoService => cryptoService.GenerateHash(string.Empty, string.Empty)).Returns("onefour");
 
             _userService = new UserService(_unitOfWork.Object, _configuration.Object, _cryptographicService.Object);
 

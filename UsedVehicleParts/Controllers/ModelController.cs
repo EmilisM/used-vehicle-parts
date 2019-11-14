@@ -34,7 +34,7 @@ namespace UsedVehicleParts.Controllers
         {
             var row = await _modelRepository.GetById(id, new[] { nameof(Model.Make) });
 
-            return row == null ? (ActionResult<Model>) NotFound() : Ok(row);
+            return row == null ? (ActionResult<Model>)NotFound() : Ok(row);
         }
 
         [HttpPost]

@@ -35,7 +35,7 @@ namespace UsedVehicleParts.Controllers
         {
             var row = await _specificationValueRepository.GetById(id, new[] { nameof(SpecificationValue.Part) });
 
-            return row == null ? (ActionResult<SpecificationValue>) NotFound() : Ok(row);
+            return row == null ? (ActionResult<SpecificationValue>)NotFound() : Ok(row);
         }
 
         [HttpPost]

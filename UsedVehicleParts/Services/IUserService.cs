@@ -8,8 +8,8 @@ namespace UsedVehicleParts.Services
 {
     public interface IUserService
     {
-        Task<string> Authenticate(string username, string password);
-        Task<string> Registrate(string username, string password);
+        Task<string> AuthenticateAsync(string username, string password);
+        Task<string> RegistrateAsync(string username, string password);
         IEnumerable<Claim> CreateClaims(string userId);
 
         string CreateJwtToken(string userId, DateTime expiry,

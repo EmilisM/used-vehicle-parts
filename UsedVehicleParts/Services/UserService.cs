@@ -28,7 +28,7 @@ namespace UsedVehicleParts.Services
             _userRepository = unitOfWork.GetRepository<UserData>();
         }
 
-        public async Task<string> Authenticate(string username, string password)
+        public async Task<string> AuthenticateAsync(string username, string password)
         {
             if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password) || username.Length < 4 || password.Length < 8)
             {
@@ -56,7 +56,7 @@ namespace UsedVehicleParts.Services
             return token;
         }
 
-        public async Task<string> Registrate(string username, string password)
+        public async Task<string> RegistrateAsync(string username, string password)
         {
             if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password) || username.Length < 4 || password.Length < 8)
             {

@@ -62,7 +62,7 @@ namespace UsedVehicleParts.Controllers
 
             try
             {
-                var token = await _userService.Authenticate(loginModel.Username, loginModel.Password);
+                var token = await _userService.AuthenticateAsync(loginModel.Username, loginModel.Password);
 
                 var tokenModel = new TokenModel(token);
 
@@ -84,7 +84,7 @@ namespace UsedVehicleParts.Controllers
 
             try
             {
-                var token = await _userService.Registrate(loginModel.Username, loginModel.Password);
+                var token = await _userService.RegistrateAsync(loginModel.Username, loginModel.Password);
 
                 var tokenModel = new TokenModel(token);
 

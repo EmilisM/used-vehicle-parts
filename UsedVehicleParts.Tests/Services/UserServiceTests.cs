@@ -87,7 +87,7 @@ namespace UsedVehicleParts.Tests.Services
         [TestCase("123", null)]
         public void UserService_Authenticate_ThrowsOnEmptyOrNullPasswordOrUsername(string username, string password)
         {
-            Assert.ThrowsAsync<UsernameOrPasswordInvalidException>(() => _userService.Authenticate(username, password));
+            Assert.ThrowsAsync<UsernameOrPasswordInvalidException>(() => _userService.AuthenticateAsync(username, password));
         }
 
         [Test]
@@ -102,7 +102,7 @@ namespace UsedVehicleParts.Tests.Services
             _userService = new UserService(_unitOfWork.Object, _configuration.Object, _cryptographicService.Object);
 
             Assert.ThrowsAsync<UsernameOrPasswordInvalidException>(() =>
-                _userService.Authenticate("username", "password"));
+                _userService.AuthenticateAsync("username", "password"));
         }
 
         [Test]
@@ -125,7 +125,7 @@ namespace UsedVehicleParts.Tests.Services
             _userService = new UserService(_unitOfWork.Object, _configuration.Object, _cryptographicService.Object);
 
             Assert.ThrowsAsync<UsernameOrPasswordInvalidException>(() =>
-                _userService.Authenticate("username", "password"));
+                _userService.AuthenticateAsync("username", "password"));
         }
 
         [Test]
@@ -138,7 +138,7 @@ namespace UsedVehicleParts.Tests.Services
         [TestCase("123", null)]
         public void UserService_Registrate_ThrowsOnEmptyOrNullPasswordOrUsername(string username, string password)
         {
-            Assert.ThrowsAsync<UsernameOrPasswordInvalidException>(() => _userService.Registrate(username, password));
+            Assert.ThrowsAsync<UsernameOrPasswordInvalidException>(() => _userService.RegistrateAsync(username, password));
         }
 
         [Test]
@@ -160,7 +160,7 @@ namespace UsedVehicleParts.Tests.Services
             _userService = new UserService(_unitOfWork.Object, _configuration.Object, _cryptographicService.Object);
 
             Assert.ThrowsAsync<UsernameTakenException>(() =>
-                _userService.Registrate("username", "password"));
+                _userService.RegistrateAsync("username", "password"));
         }
     }
 }

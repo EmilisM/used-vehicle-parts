@@ -35,7 +35,7 @@ namespace UsedVehicleParts.Controllers
         {
             var row = await _trimRepository.GetById(id, new[] { nameof(Trim.Model) });
 
-            return row == null ? (ActionResult<Trim>)NotFound() : Ok(row);
+            return row == null ? (ActionResult<Trim>) NotFound() : Ok(row);
         }
 
         [HttpPost]

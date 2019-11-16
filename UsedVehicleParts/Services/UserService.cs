@@ -5,10 +5,8 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
-
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
-
 using UsedVehicleParts.DAL;
 using UsedVehicleParts.DAL.Entities;
 
@@ -17,16 +15,11 @@ namespace UsedVehicleParts.Services
     public class UserService : IUserService
     {
         private readonly IUnitOfWork _unitOfWork;
-
         private readonly IRepository<UserData> _userRepository;
-
         private readonly IConfiguration _configuration;
-
         private readonly ICryptographicService _cryptographicService;
 
-        public UserService(
-            IUnitOfWork unitOfWork,
-            IConfiguration configuration,
+        public UserService(IUnitOfWork unitOfWork, IConfiguration configuration,
             ICryptographicService cryptographicService)
         {
             _unitOfWork = unitOfWork;
@@ -37,8 +30,7 @@ namespace UsedVehicleParts.Services
 
         public async Task<string> Authenticate(string username, string password)
         {
-            if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password) || username.Length < 4
-                || password.Length < 8)
+            if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password) || username.Length < 4 || password.Length < 8)
             {
                 throw new UsernameOrPasswordInvalidException();
             }
@@ -66,8 +58,7 @@ namespace UsedVehicleParts.Services
 
         public async Task<string> Registrate(string username, string password)
         {
-            if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password) || username.Length < 4
-                || password.Length < 8)
+            if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password) || username.Length < 4 || password.Length < 8)
             {
                 throw new UsernameOrPasswordInvalidException();
             }
@@ -84,7 +75,12 @@ namespace UsedVehicleParts.Services
             var salt = _cryptographicService.GenerateSalt();
             var hash = _cryptographicService.GenerateHash(password, salt);
 
-            var userData = new UserData { Username = username, PasswordSalt = salt, PasswordHash = hash };
+            var userData = new UserData
+            {
+                Username = username,
+                PasswordSalt = salt,
+                PasswordHash = hash
+            };
 
             await _userRepository.Create(userData);
             await _unitOfWork.Save();
@@ -102,9 +98,7 @@ namespace UsedVehicleParts.Services
             return token;
         }
 
-        public string CreateJwtToken(
-            string userId,
-            DateTime expiry,
+        public string CreateJwtToken(string userId, DateTime expiry,
             string algorithmType = SecurityAlgorithms.HmacSha256Signature)
         {
             if (string.IsNullOrWhiteSpace(userId))
@@ -127,9 +121,11 @@ namespace UsedVehicleParts.Services
             var symmetricSecurityKey = new SymmetricSecurityKey(key);
 
             var claims = CreateClaims(userId);
-            var signingCredentials = new SigningCredentials(symmetricSecurityKey, algorithmType);
+            var signingCredentials =
+                new SigningCredentials(symmetricSecurityKey, algorithmType);
 
-            var token = new JwtSecurityToken(claims: claims, expires: expiry, signingCredentials: signingCredentials);
+            var token = new JwtSecurityToken(claims: claims, expires: expiry,
+                signingCredentials: signingCredentials);
 
             var tokenSerialized = new JwtSecurityTokenHandler().WriteToken(token);
 
@@ -143,7 +139,10 @@ namespace UsedVehicleParts.Services
                 throw new ArgumentNullException();
             }
 
-            var claims = new List<Claim> { new Claim(ClaimTypes.NameIdentifier, userId) };
+            var claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.NameIdentifier, userId)
+            };
 
             return claims;
         }

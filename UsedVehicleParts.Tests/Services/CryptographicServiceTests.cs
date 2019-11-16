@@ -2,7 +2,7 @@
 using System.Security.Cryptography;
 using NUnit.Framework;
 using UsedVehicleParts.Services;
-// ReSharper disable InconsistentNaming
+
 namespace UsedVehicleParts.Tests.Services
 {
     [TestFixture]
@@ -65,11 +65,11 @@ namespace UsedVehicleParts.Tests.Services
         [TestCase("")]
         public void CryptographicService_GenerateHash_HandlesNullOrEmptyPassword(string password)
         {
-            const string Salt = "c3RyaW5n";
+            const string salt = "c3RyaW5n";
 
             string result = null;
 
-            Assert.DoesNotThrow(() => result = _cryptographicService.GenerateHash(password, Salt));
+            Assert.DoesNotThrow(() => result = _cryptographicService.GenerateHash(password, salt));
 
             Assert.AreEqual(null, result);
         }
@@ -80,9 +80,9 @@ namespace UsedVehicleParts.Tests.Services
         [TestCase("1234567")]
         public void CryptographicService_GenerateHash_HandlesShortPassword(string password)
         {
-            const string Salt = "c3RyaW5n";
+            const string salt = "c3RyaW5n";
 
-            string hash = _cryptographicService.GenerateHash(password, Salt);
+            string hash = _cryptographicService.GenerateHash(password, salt);
 
             Assert.AreEqual(null, hash);
         }
@@ -92,11 +92,11 @@ namespace UsedVehicleParts.Tests.Services
         [TestCase("")]
         public void CryptographicService_GenerateHash_HandlesOnNullOrEmptySalt(string salt)
         {
-            const string Password = "randompassword";
+            const string password = "randompassword";
 
             string hash = null;
 
-            Assert.DoesNotThrow(() => hash = _cryptographicService.GenerateHash(Password, salt));
+            Assert.DoesNotThrow(() => hash = _cryptographicService.GenerateHash(password, salt));
 
             Assert.AreEqual(null, hash);
         }
@@ -104,17 +104,17 @@ namespace UsedVehicleParts.Tests.Services
         [Test]
         public void CryptographicService_GenerateHash_HandleSaltNotInBase64()
         {
-            const string Password = "randompassword";
-            const string Salt = "randomsalt";
+            const string password = "randompassword";
+            const string salt = "randomsalt";
 
-            string hash = _cryptographicService.GenerateHash(Password, Salt);
+            string hash = _cryptographicService.GenerateHash(password, salt);
 
             Assert.AreEqual(null, hash);
         }
 
         private static double ExpectedSaltLength(int length)
         {
-            return 4 * Math.Ceiling((double)length / 3);
+            return 4 * Math.Ceiling((double) length / 3);
         }
     }
 }

@@ -1,9 +1,7 @@
 using System;
 using System.Security.Cryptography;
 using System.Text;
-
 using AutoMapper;
-
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -12,7 +10,6 @@ using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
-
 using UsedVehicleParts.Configuration;
 using UsedVehicleParts.DAL;
 using UsedVehicleParts.DAL.Entities;
@@ -33,40 +30,50 @@ namespace UsedVehicleParts
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
-
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration => { configuration.RootPath = "ClientApp/build"; });
 
             services.Configure<IISOptions>(options => options.ForwardClientCertificate = false);
 
-            services.AddSwaggerDocument(
-                config => { config.PostProcess = document => { document.Info.Title = "Used vehicle parts API"; }; });
+            services.AddSwaggerDocument(config =>
+            {
+                config.PostProcess = document => { document.Info.Title = "Used vehicle parts API"; };
+            });
 
             services.AddAutoMapper(typeof(MappingProfile));
 
             var jwtToken = _configuration.GetValue<string>("JWTSecret");
             var key = Encoding.ASCII.GetBytes(jwtToken);
 
-            services.AddAuthentication(
-                x =>
-                    {
-                        x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                        x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-                    }).AddJwtBearer(
-                x =>
-                    {
-                        x.TokenValidationParameters = new TokenValidationParameters
-                                                          {
-                                                              ValidateIssuerSigningKey = true,
-                                                              IssuerSigningKey = new SymmetricSecurityKey(key),
-                                                              ValidateIssuer = false,
-                                                              ValidateAudience = false,
-                                                              ValidateLifetime = true,
-                                                              ClockSkew = TimeSpan.Zero
-                                                          };
-                    });
+            services.AddAuthentication(x =>
+            {
+                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(x =>
+            {
+                x.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(key),
+                    ValidateIssuer = false,
+                    ValidateAudience = false,
+                    ValidateLifetime = true,
+                    ClockSkew = TimeSpan.Zero
+                };
+            });
 
             RegisterDependencies(services);
+        }
+
+        private static void RegisterDependencies(IServiceCollection services)
+        {
+            services.AddSingleton<UsedVehiclePartsContext>();
+
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddScoped<IUserService, UserService>();
+
+            services.AddTransient<RNGCryptoServiceProvider>();
+            services.AddTransient<ICryptographicService, CryptographicService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -90,27 +97,15 @@ namespace UsedVehicleParts
             app.UseAuthentication();
             app.UseMvc();
 
-            app.UseSpa(
-                spa =>
-                    {
-                        spa.Options.SourcePath = "ClientApp";
+            app.UseSpa(spa =>
+            {
+                spa.Options.SourcePath = "ClientApp";
 
-                        if (env.IsDevelopment())
-                        {
-                            spa.UseReactDevelopmentServer("start");
-                        }
-                    });
-        }
-
-        private static void RegisterDependencies(IServiceCollection services)
-        {
-            services.AddSingleton<UsedVehiclePartsContext>();
-
-            services.AddScoped<IUnitOfWork, UnitOfWork>();
-            services.AddScoped<IUserService, UserService>();
-
-            services.AddTransient<RNGCryptoServiceProvider>();
-            services.AddTransient<ICryptographicService, CryptographicService>();
+                if (env.IsDevelopment())
+                {
+                    spa.UseReactDevelopmentServer("start");
+                }
+            });
         }
     }
 }

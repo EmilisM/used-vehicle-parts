@@ -3,20 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
-
 using AutoMapper;
-
 using Microsoft.EntityFrameworkCore;
-
 using UsedVehicleParts.DAL.Entities;
 
 namespace UsedVehicleParts.DAL
 {
-    public class Repository<TEntity> : IRepository<TEntity>
-        where TEntity : Entity
+    public class Repository<TEntity> : IRepository<TEntity> where TEntity : Entity
     {
         private readonly DbSet<TEntity> _dbSet;
-
         private readonly IMapper _mapper;
 
         public Repository(UsedVehiclePartsContext context, IMapper mapper)
@@ -25,21 +20,16 @@ namespace UsedVehicleParts.DAL
             _dbSet = context.Set<TEntity>();
         }
 
-        public async Task<IEnumerable<TEntity>> Get(
-            Expression<Func<TEntity, bool>> filter = null,
+        public async Task<IEnumerable<TEntity>> Get(Expression<Func<TEntity, bool>> filter = null,
             IEnumerable<string> includeProperties = null)
         {
             IQueryable<TEntity> query = _dbSet;
 
-            if (filter != null)
-            {
-                query = query.Where(filter);
-            }
+            if (filter != null) query = query.Where(filter);
 
             if (includeProperties != null)
             {
-                query = includeProperties.Aggregate(
-                    query,
+                query = includeProperties.Aggregate(query,
                     (current, includeProperty) => current.Include(includeProperty));
             }
 

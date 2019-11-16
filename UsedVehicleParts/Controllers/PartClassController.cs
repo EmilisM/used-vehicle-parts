@@ -35,7 +35,7 @@ namespace UsedVehicleParts.Controllers
         {
             var row = await _partClassRepository.GetById(id);
 
-            return row == null ? (ActionResult<PartClass>)NotFound() : Ok(row);
+            return row == null ? (ActionResult<PartClass>) NotFound() : Ok(row);
         }
 
         [HttpPost]

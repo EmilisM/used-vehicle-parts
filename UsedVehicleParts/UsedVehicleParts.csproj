@@ -41,7 +41,15 @@
     <None Remove="ClientApp\build\manifest.json" />
     <None Remove="ClientApp\build\service-worker.js" />
     <None Remove="ClientApp\src\App.tsx" />
+    <None Remove="ClientApp\src\Containers\Home.tsx" />
+    <None Remove="ClientApp\src\Containers\NotFound.tsx" />
     <None Remove="ClientApp\src\index.tsx" />
+    <None Remove="ClientApp\src\Router.tsx" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="ClientApp\src\Components\" />
+    <Folder Include="ClientApp\src\Blocks\" />
   </ItemGroup>
 
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">

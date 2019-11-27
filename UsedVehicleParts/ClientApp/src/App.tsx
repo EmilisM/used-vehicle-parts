@@ -1,7 +1,6 @@
 import * as React from "react";
+import Router from "./Router";
 
-interface HelloProps { greeting: string };
-
-const App = (props: HelloProps) => <div>{props.greeting}</div>;
+const App = () => <Router />;
 
 export default App;

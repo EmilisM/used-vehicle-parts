@@ -48,6 +48,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <TypeScriptCompile Remove="ClientApp\src\Constants\api.tsx" />
+    <TypeScriptCompile Remove="ClientApp\src\Utils\useFetch.tsx" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="ClientApp\src\Components\" />
     <Folder Include="ClientApp\src\Blocks\" />
   </ItemGroup>
@@ -80,7 +85,7 @@
   <ProjectExtensions><VisualStudio><UserProperties /></VisualStudio></ProjectExtensions>
 
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
-    <TypeScriptTarget>ES2015</TypeScriptTarget>
+    <TypeScriptTarget>ES2019</TypeScriptTarget>
     <TypeScriptJSXEmit>React</TypeScriptJSXEmit>
     <TypeScriptModuleKind>ES6</TypeScriptModuleKind>
     <TypeScriptCompileOnSaveEnabled>True</TypeScriptCompileOnSaveEnabled>

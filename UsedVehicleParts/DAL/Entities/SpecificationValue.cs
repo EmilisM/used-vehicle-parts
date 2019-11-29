@@ -3,7 +3,7 @@
     public class SpecificationValue : Entity
     {
         public string Name { get; set; }
-        public string Value { get; set; }
+        public int Value { get; set; }
         public string Units { get; set; }
         public int PartId { get; set; }
 

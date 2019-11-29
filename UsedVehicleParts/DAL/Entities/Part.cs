@@ -8,8 +8,8 @@ namespace UsedVehicleParts.DAL.Entities
         public DateTime? ProductionYearStart { get; set; }
         public DateTime? ProductionYearEnd { get; set; }
         public string Manufacturer { get; set; }
-        public string QualityGrade { get; set; }
-        public int? Price { get; set; }
+        public int QualityGrade { get; set; }
+        public int Price { get; set; }
         public string PriceUnits { get; set; }
         public string PartNumber { get; set; }
         public int PartClassId { get; set; }

@@ -110,10 +110,6 @@ namespace UsedVehicleParts.DAL.Entities
 
                 entity.Property(e => e.ProductionYearStart).HasColumnType("date");
 
-                entity.Property(e => e.QualityGrade)
-                    .HasMaxLength(255)
-                    .IsUnicode(false);
-
                 entity.Property(e => e.SellerId).HasColumnName("SellerID");
 
                 entity.Property(e => e.TrimId).HasColumnName("TrimID");
@@ -145,10 +141,6 @@ namespace UsedVehicleParts.DAL.Entities
                 entity.Property(e => e.PartId).HasColumnName("PartID");
 
                 entity.Property(e => e.Units)
-                    .HasMaxLength(255)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.Value)
                     .HasMaxLength(255)
                     .IsUnicode(false);
 

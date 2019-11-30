@@ -1,16 +1,10 @@
 ﻿import * as React from "react";
-import { useMakePost } from "../Api/api";
 
 const Home = () => {
-  const { mutate } = useMakePost({});
-
-  const postMake = () => {
-    mutate({ id: 0, name: "test from front" }).then(res => console.log(res));
-  };
 
   return (
     <div>
-      <button onClick={postMake}>Post</button>
+      <img alt="logo" src="https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Fwww.agricultureinzambia.com%2Fwp-content%2Fuploads%2F2017%2F08%2Fbulb-1238338_640-e1502268004657.jpg&f=1&nofb=1" />
     </div>
   );
 };

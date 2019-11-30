@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using Moq;
 using NUnit.Framework;
-using UsedVehicleParts.DAL;
-using UsedVehicleParts.DAL.Entities;
+using UsedVehicleParts.API.DAL;
+using UsedVehicleParts.API.DAL.Entities;
 
 namespace UsedVehicleParts.Tests.DAL
 {

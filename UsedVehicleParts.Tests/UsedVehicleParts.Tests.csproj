@@ -15,7 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\UsedVehicleParts\UsedVehicleParts.csproj" />
+    <ProjectReference Include="..\UsedVehicleParts.API\UsedVehicleParts.API.csproj" />
   </ItemGroup>
 
   <ItemGroup>

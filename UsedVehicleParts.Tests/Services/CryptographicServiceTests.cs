@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Security.Cryptography;
 using NUnit.Framework;
-using UsedVehicleParts.Services;
+using UsedVehicleParts.API.Services;
 
 namespace UsedVehicleParts.Tests.Services
 {

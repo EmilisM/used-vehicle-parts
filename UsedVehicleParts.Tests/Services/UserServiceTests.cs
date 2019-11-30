@@ -6,10 +6,9 @@ using System.Security.Claims;
 using Microsoft.Extensions.Configuration;
 using Moq;
 using NUnit.Framework;
-using UsedVehicleParts.DAL;
-using UsedVehicleParts.DAL.Entities;
-using UsedVehicleParts.Services;
-
+using UsedVehicleParts.API.DAL;
+using UsedVehicleParts.API.DAL.Entities;
+using UsedVehicleParts.API.Services;
 namespace UsedVehicleParts.Tests.Services
 {
     [TestFixture]

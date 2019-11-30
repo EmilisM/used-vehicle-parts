@@ -19,16 +19,22 @@ namespace UsedVehicleParts.API
     public class Startup
     {
         private readonly IConfiguration _configuration;
+        private readonly string _specificOrigins = "_myAllowSpecificOrigins";
 
         public Startup(IConfiguration configuration)
         {
             _configuration = configuration;
         }
 
-
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors(options =>
+            {
+                options.AddPolicy(_specificOrigins,
+                    builder => { builder.WithOrigins("http://85.206.134.3", "http://localhost:3000").AllowAnyHeader().AllowAnyMethod(); });
+            });
+
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             services.AddSwaggerDocument(config =>
@@ -85,7 +91,7 @@ namespace UsedVehicleParts.API
                 app.UseHsts();
             }
 
-            app.UseHttpsRedirection();
+            app.UseCors(_specificOrigins);
 
             app.UseOpenApi();
             app.UseSwaggerUi3();

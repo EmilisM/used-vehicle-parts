@@ -1,4 +1,3 @@
-import React from "react";
 import styled from "styled-components";
 
 import colors from "../Constants/colors";
@@ -19,6 +18,4 @@ const FooterStyled = styled.footer`
   );
 `;
 
-const Footer = () => <FooterStyled id="footer" />;
-
-export default Footer;
+export default FooterStyled;

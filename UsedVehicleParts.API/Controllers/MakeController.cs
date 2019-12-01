@@ -22,9 +22,10 @@ namespace UsedVehicleParts.API.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public async Task<ActionResult<IEnumerable<Make>>> Get()
+        public async Task<ActionResult<IEnumerable<Make>>> Get([FromQuery] string query)
         {
-            var makes = await _makeRepository.Get();
+            var makes = await _makeRepository.Get(make =>
+                string.IsNullOrWhiteSpace(query) || make.Name.ToLower().Contains(query.ToLower()));
 
             return Ok(makes);
         }

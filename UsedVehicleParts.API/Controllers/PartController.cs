@@ -28,9 +28,16 @@ namespace UsedVehicleParts.API.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public async Task<ActionResult<IEnumerable<Part>>> Get()
+        public async Task<ActionResult<IEnumerable<Part>>> Get([FromQuery] string query)
         {
-            var makes = await _partRepository.Get(null, _includeProperties);
+            var queryLower = query.ToLower();
+
+            var makes = await _partRepository.Get(
+                part => string.IsNullOrWhiteSpace(query) ||
+                        part.Name.ToLower().Contains(queryLower) ||
+                        part.PartNumber.ToLower().Contains(queryLower) ||
+                        part.Manufacturer.ToLower().Contains(queryLower),
+                _includeProperties);
 
             return Ok(makes);
         }

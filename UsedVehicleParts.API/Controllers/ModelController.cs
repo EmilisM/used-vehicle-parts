@@ -21,9 +21,11 @@ namespace UsedVehicleParts.API.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public async Task<ActionResult<Model>> Get()
+        public async Task<ActionResult<Model>> Get([FromQuery] string query)
         {
-            var models = await _modelRepository.Get(null, new[] { nameof(Model.Make) });
+            var models = await _modelRepository.Get(
+                model => string.IsNullOrWhiteSpace(query) || model.Name.ToLower().Contains(query.ToLower()),
+                new[] { nameof(Model.Make) });
 
             return Ok(models);
         }

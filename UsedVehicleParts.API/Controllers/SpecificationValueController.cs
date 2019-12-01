@@ -22,9 +22,11 @@ namespace UsedVehicleParts.API.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public async Task<ActionResult<IEnumerable<SpecificationValue>>> Get()
+        public async Task<ActionResult<IEnumerable<SpecificationValue>>> Get([FromQuery] string query)
         {
-            var makes = await _specificationValueRepository.Get(null, new[] { nameof(SpecificationValue.Part) });
+            var makes = await _specificationValueRepository.Get(
+                value => string.IsNullOrWhiteSpace(query) || value.Name.ToLower().Contains(query.ToLower()),
+                new[] { nameof(SpecificationValue.Part) });
 
             return Ok(makes);
         }

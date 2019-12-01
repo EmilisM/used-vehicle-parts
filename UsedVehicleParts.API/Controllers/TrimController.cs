@@ -22,9 +22,11 @@ namespace UsedVehicleParts.API.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public async Task<ActionResult<IEnumerable<Trim>>> Get()
+        public async Task<ActionResult<IEnumerable<Trim>>> Get([FromQuery] string query)
         {
-            var makes = await _trimRepository.Get(null, new[] { nameof(Trim.Model) });
+            var makes = await _trimRepository.Get(
+                trim => string.IsNullOrWhiteSpace(query) || trim.Name.ToLower().Contains(query.ToLower()),
+                new[] { nameof(Trim.Model) });
 
             return Ok(makes);
         }

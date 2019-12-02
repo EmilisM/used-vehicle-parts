@@ -1,7 +1,7 @@
 import React from "react";
-import { RestfulProvider } from "restful-react";
 import styled from "styled-components";
 import { BrowserRouter } from "react-router-dom";
+import { Provider } from "use-http";
 
 import Router from "./Router";
 import Header from "./Blocks/header";
@@ -15,12 +15,13 @@ const AppBase = styled.div`
 
 const Content = styled.div`
   flex: 1;
+  padding: 20px;
 `;
 
 function App() {
   return (
     <BrowserRouter>
-      <RestfulProvider base="http://85.206.134.3:7000">
+      <Provider url="http://85.206.134.3:7000">
         <AppBase id="app">
           <Header />
           <Content id="app-content">
@@ -28,7 +29,7 @@ function App() {
           </Content>
           <Footer />
         </AppBase>
-      </RestfulProvider>
+      </Provider>
     </BrowserRouter>
   );
 }

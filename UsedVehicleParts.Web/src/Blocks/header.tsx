@@ -10,16 +10,16 @@ const HeaderStyled = styled.header`
   height: 56px;
   display: flex;
   align-items: center;
-  background: ${colors.headerMain};
+  background: ${colors.primaryColor};
   background: -webkit-linear-gradient(
     to right,
-    ${colors.headerMain},
-    ${colors.headerSecondary}
+    ${colors.primaryColor},
+    ${colors.secondaryColor}
   );
   background: linear-gradient(
     to right,
-    ${colors.headerMain},
-    ${colors.headerSecondary}
+    ${colors.primaryColor},
+    ${colors.secondaryColor}
   );
   padding: 10px;
   position: sticky;
@@ -34,7 +34,7 @@ const HeaderTitleLinkStyled = styled(Link)`
   font-style: normal;
 
   &:hover {
-    color: #cccccc;
+    color: ${colors.gray};
   }
 `;
 

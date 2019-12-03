@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Linq.Expressions;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using UsedVehicleParts.API.DAL;
@@ -21,11 +23,13 @@ namespace UsedVehicleParts.API.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public async Task<ActionResult<Model>> Get([FromQuery] string query)
+        public async Task<ActionResult<Model>> Get([FromQuery] string name, [FromQuery] int? makeId)
         {
-            var models = await _modelRepository.Get(
-                model => string.IsNullOrWhiteSpace(query) || model.Name.ToLower().Contains(query.ToLower()),
-                new[] { nameof(Model.Make) });
+            Expression<Func<Model, bool>> filter = model =>
+                (makeId == null || model.MakeId == makeId) &&
+                (string.IsNullOrWhiteSpace(name) || model.Name != null && model.Name.ToLower().Contains(name.ToLower()));
+
+            var models = await _modelRepository.Get(filter, new[] { nameof(Model.Make) });
 
             return Ok(models);
         }

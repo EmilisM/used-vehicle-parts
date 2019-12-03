@@ -25,7 +25,10 @@ namespace UsedVehicleParts.API.DAL
         {
             IQueryable<TEntity> query = _dbSet;
 
-            if (filter != null) query = query.Where(filter);
+            if (filter != null)
+            {
+                query = query.Where(filter);
+            }
 
             if (includeProperties != null)
             {

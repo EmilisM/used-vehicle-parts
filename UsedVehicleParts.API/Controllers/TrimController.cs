@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -22,13 +24,15 @@ namespace UsedVehicleParts.API.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public async Task<ActionResult<IEnumerable<Trim>>> Get([FromQuery] string query)
+        public async Task<ActionResult<IEnumerable<Trim>>> Get([FromQuery] string name, [FromQuery] int? modelId)
         {
-            var makes = await _trimRepository.Get(
-                trim => string.IsNullOrWhiteSpace(query) || trim.Name.ToLower().Contains(query.ToLower()),
-                new[] { nameof(Trim.Model) });
+            Expression<Func<Trim, bool>> filter = trim =>
+                (modelId == null || trim.ModelId == modelId) &&
+                (string.IsNullOrWhiteSpace(name) || trim.Name != null && trim.Name.ToLower().Contains(name.ToLower()));
 
-            return Ok(makes);
+            var trims = await _trimRepository.Get(filter, new[] { nameof(Trim.Model) });
+
+            return Ok(trims);
         }
 
         [HttpGet("{id}")]

@@ -9,7 +9,9 @@ import {
   initialState,
   HomeActions,
   MakeOption,
-  ModelOption
+  ModelOption,
+  TrimOption,
+  PartClassOption
 } from "../Reducers/home";
 
 const HomeStyled = styled.div`
@@ -36,8 +38,16 @@ const Home = () => {
     dispatch(HomeActions.setMake(value));
   };
 
-  const setModels = (value: ModelOption[]) => {
-    dispatch(HomeActions.setModels(value));
+  const setModel = (value: ModelOption) => {
+    dispatch(HomeActions.setModel(value));
+  };
+
+  const setTrims = (value: TrimOption[]) => {
+    dispatch(HomeActions.setTrims(value));
+  };
+
+  const setPartClasses = (value: PartClassOption[]) => {
+    dispatch(HomeActions.setPartClasses(value));
   };
 
   return (
@@ -46,8 +56,12 @@ const Home = () => {
         <SearchCard
           make={state.make}
           setMake={setMake}
-          models={state.models}
-          setModels={setModels}
+          model={state.model}
+          setModel={setModel}
+          trims={state.trims}
+          setTrims={setTrims}
+          partClasses={state.partClasses}
+          setPartClasses={setPartClasses}
         />
       </FirstColumn>
       <SecondColumn>

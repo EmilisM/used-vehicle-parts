@@ -1,44 +1,87 @@
 import React from "react";
 import styled from "styled-components";
 
-import { MakeOption, ModelOption } from "../Reducers/home";
+import {
+  MakeOption,
+  ModelOption,
+  TrimOption,
+  PartClassOption
+} from "../Reducers/home";
 
 import InputTitle from "../Components/inputTitle";
 import MakeDropdown from "../Components/makeDropdown";
 import ModelDropdown from "../Components/modelDropdown";
+import TrimDropdown from "../Components/trimDropdown";
+import PartClassDropdown from "../Components/partClassDropdown";
 
 import Card from "./card";
 
-const MakeDropdownStyled = styled(MakeDropdown)`
+const fieldStyle = `
   margin-top: 10px;
 `;
 
-const ModelTitleStyled = styled(InputTitle)`
-  margin-top: 10px;
+const MakeDropdownStyled = styled(MakeDropdown)`
+  ${fieldStyle}
 `;
 
 const ModelDropdownStyled = styled(ModelDropdown)`
-  margin-top: 10px;
+  ${fieldStyle}
+`;
+
+const TrimDropdownStyled = styled(TrimDropdown)`
+  ${fieldStyle}
+`;
+
+const TitleStyled = styled(InputTitle)`
+  ${fieldStyle}
+`;
+
+const PartClassContainer = styled.div`
+  margin-top: 30px;
+`;
+
+const PartClassDropdownStyled = styled(PartClassDropdown)`
+  ${fieldStyle}
 `;
 
 export interface SearchCardProps {
   make?: MakeOption;
-  models?: ModelOption[];
+  model?: ModelOption;
+  trims?: TrimOption[];
+  partClasses?: PartClassOption[];
   setMake: (value: MakeOption) => void;
-  setModels: (value: ModelOption[]) => void;
+  setModel: (value: ModelOption) => void;
+  setTrims: (value: TrimOption[]) => void;
+  setPartClasses: (value: PartClassOption[]) => void;
 }
 
-const SearchCard = ({ make, models, setMake, setModels }: SearchCardProps) => {
+const SearchCard = ({
+  make,
+  model,
+  trims,
+  partClasses,
+  setMake,
+  setModel,
+  setTrims,
+  setPartClasses
+}: SearchCardProps) => {
   return (
     <Card title="Search">
-      <InputTitle>Choose make</InputTitle>
-      <MakeDropdownStyled value={make} onChange={setMake} />
-      <ModelTitleStyled>Choose model</ModelTitleStyled>
-      <ModelDropdownStyled
-        value={models}
-        onChange={setModels}
-        makeId={make && make.value}
-      />
+      <div>
+        <InputTitle>Choose make</InputTitle>
+        <MakeDropdownStyled value={make} onChange={setMake} />
+        <TitleStyled>Choose model</TitleStyled>
+        <ModelDropdownStyled value={model} onChange={setModel} make={make} />
+        <TitleStyled>Choose trim</TitleStyled>
+        <TrimDropdownStyled value={trims} onChange={setTrims} model={model} />
+      </div>
+      <PartClassContainer>
+        <InputTitle>Choose part class</InputTitle>
+        <PartClassDropdownStyled
+          value={partClasses}
+          onChange={setPartClasses}
+        />
+      </PartClassContainer>
     </Card>
   );
 };

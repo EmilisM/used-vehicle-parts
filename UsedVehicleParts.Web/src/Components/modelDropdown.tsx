@@ -1,35 +1,26 @@
 import React from "react";
-import AsyncSelect, { Props } from "react-select/async";
+import { Props } from "react-select/async";
 import useFetch from "use-http";
-import styled from "styled-components";
 
 import { modelGetAll, ModelResponse } from "../Api/api";
-import colors from "../Constants/colors";
-import { ModelOption } from "../Reducers/home";
+import { ModelOption, MakeOption } from "../Reducers/home";
+
+import BaseDropdownStyled from "./baseDropdown";
 
 interface ModelDropdownProps {
   className?: string;
-  makeId?: number;
-  value?: ModelOption[];
-  onChange: (value: ModelOption[]) => void;
+  value?: ModelOption;
+  onChange: (value: ModelOption) => void;
+  make?: MakeOption;
 }
 
-const DropdownStyled = styled(AsyncSelect)`
-  .model-dropdown__dropdown-indicator {
-    color: ${colors.primaryColor};
-  }
-  .model-dropdown__clear-indicator {
-    color: ${colors.primaryColor};
-  }
-`;
-
-const ModelDropdownStyled = (props: Props<ModelOption[]>) => (
-  <DropdownStyled {...props} />
-);
+function ModelDropdownStyled(props: Props<ModelOption>) {
+  return <BaseDropdownStyled {...props} />;
+}
 
 const ModelDropdown = ({
   className,
-  makeId,
+  make,
   value,
   onChange
 }: ModelDropdownProps) => {
@@ -37,14 +28,20 @@ const ModelDropdown = ({
 
   const loadOptions = (inputValue: string) =>
     new Promise(resolve => {
-      get(modelGetAll(inputValue, makeId)).then(data => {
-        const models: ModelOption[] = data.map((model: ModelResponse) => ({
-          value: model.id,
-          label: model.name
-        }));
+      get(modelGetAll(inputValue, make && make.value)).then(
+        (data: ModelResponse[]) => {
+          if (!data) {
+            return resolve();
+          }
 
-        resolve(models);
-      });
+          const models: ModelOption[] = data.map(model => ({
+            value: model.id,
+            label: model.name
+          }));
+
+          resolve(models);
+        }
+      );
     });
 
   return (
@@ -54,9 +51,9 @@ const ModelDropdown = ({
       loadOptions={loadOptions}
       openMenuOnFocus={false}
       openMenuOnClick={false}
-      isMulti={true}
       value={value}
-      onChange={value => onChange(value as ModelOption[])}
+      onChange={value => onChange(value as ModelOption)}
+      isDisabled={!make}
     />
   );
 };

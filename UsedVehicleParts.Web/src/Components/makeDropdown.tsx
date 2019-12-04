@@ -1,11 +1,11 @@
 import React from "react";
-import AsyncSelect, { Props } from "react-select/async";
+import { Props } from "react-select/async";
 import useFetch from "use-http";
-import styled from "styled-components";
 
 import { makeGetAll, MakeResponse } from "../Api/api";
-import colors from "../Constants/colors";
 import { MakeOption } from "../Reducers/home";
+
+import BaseDropdownStyled from "./baseDropdown";
 
 interface MakeDropdownProps {
   className?: string;
@@ -13,26 +13,21 @@ interface MakeDropdownProps {
   onChange: (value: MakeOption) => void;
 }
 
-const DropdownStyled = styled(AsyncSelect)<Props<MakeOption>>`
-  .${({ classNamePrefix }) => classNamePrefix}__dropdown-indicator {
-    color: ${colors.primaryColor};
-  }
-  .${({ classNamePrefix }) => classNamePrefix}__clear-indicator {
-    color: ${colors.primaryColor};
-  }
-`;
-
-const MakeDropdownStyled = (props: Props<MakeOption>) => (
-  <DropdownStyled {...props} />
-);
+function MakeDropdownStyled(props: Props<MakeOption>) {
+  return <BaseDropdownStyled {...props} />;
+}
 
 const MakeDropdown = ({ className, value, onChange }: MakeDropdownProps) => {
   const { get } = useFetch();
 
   const loadOptions = (inputValue: string) =>
     new Promise(resolve => {
-      get(makeGetAll(inputValue)).then(data => {
-        const makes: MakeOption[] = data.map((make: MakeResponse) => ({
+      get(makeGetAll(inputValue)).then((data: MakeResponse[]) => {
+        if (!data) {
+          return resolve();
+        }
+
+        const makes: MakeOption[] = data.map(make => ({
           value: make.id,
           label: make.name
         }));
@@ -49,6 +44,7 @@ const MakeDropdown = ({ className, value, onChange }: MakeDropdownProps) => {
       openMenuOnFocus={false}
       openMenuOnClick={false}
       isClearable
+      value={value}
       onChange={value => onChange(value as MakeOption)}
     />
   );

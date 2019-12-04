@@ -28,7 +28,7 @@ namespace UsedVehicleParts.API.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public async Task<ActionResult<IEnumerable<Part>>> Get([FromQuery] string query)
+        public async Task<ActionResult<IEnumerable<Part>>> Get([FromQuery] string query, [FromQuery] string[] trimId)
         {
             var queryLower = query.ToLower();
 

@@ -22,10 +22,11 @@ namespace UsedVehicleParts.API.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public async Task<ActionResult<IEnumerable<PartClass>>> Get([FromQuery] string query)
+        public async Task<ActionResult<IEnumerable<PartClass>>> Get([FromQuery] string name)
         {
             var makes = await _partClassRepository.Get(partClass =>
-                string.IsNullOrWhiteSpace(query) || partClass.Name.ToLower().Contains(query.ToLower()));
+                string.IsNullOrWhiteSpace(name) ||
+                partClass.Name != null && partClass.Name.ToLower().Contains(name.ToLower()));
 
             return Ok(makes);
         }

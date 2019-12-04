@@ -1,8 +1,16 @@
-﻿import * as React from "react";
+﻿import React, { useReducer } from "react";
 import styled from "styled-components";
 
 import Card from "../Blocks/card";
 import SearchCard from "../Blocks/searchCard";
+
+import {
+  reducer,
+  initialState,
+  HomeActions,
+  MakeOption,
+  ModelOption
+} from "../Reducers/home";
 
 const HomeStyled = styled.div`
   width: 100%;
@@ -22,10 +30,25 @@ const SecondColumn = styled.div`
 `;
 
 const Home = () => {
+  const [state, dispatch] = useReducer(reducer, initialState);
+
+  const setMake = (value: MakeOption) => {
+    dispatch(HomeActions.setMake(value));
+  };
+
+  const setModels = (value: ModelOption[]) => {
+    dispatch(HomeActions.setModels(value));
+  };
+
   return (
     <HomeStyled>
       <FirstColumn>
-        <SearchCard />
+        <SearchCard
+          make={state.make}
+          setMake={setMake}
+          models={state.models}
+          setModels={setModels}
+        />
       </FirstColumn>
       <SecondColumn>
         <Card>Home</Card>

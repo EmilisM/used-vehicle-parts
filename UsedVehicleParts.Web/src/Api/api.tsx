@@ -1,18 +1,29 @@
-export const makeGetAll = (query?: string) => `/api/make?query=${query}`;
-
-export interface Make {
-  id?: number;
+interface Make {
   name?: string;
   yearFounded?: string;
 }
 
-export const modelGetAll = (query?: string) => `/api/model?query=${query}`;
+export interface MakeRequest extends Make {}
 
-export interface Model {
-  id?: number;
+export interface MakeResponse extends Make {
+  id: number;
+}
+
+interface Model {
   name?: string;
   productionYearFrom?: string;
   productionYearTo?: string;
   makeId: number;
-  make?: Make;
+  make?: MakeResponse;
 }
+
+export interface ModelRequest extends Model {}
+
+export interface ModelResponse extends Model {
+  id: number;
+}
+
+export const makeGetAll = (name?: string) => `/api/make?name=${name}`;
+
+export const modelGetAll = (name?: string, makeId?: number) =>
+  `/api/model?name=${name}&makeId=${makeId || ""}`;

@@ -183,10 +183,6 @@ namespace UsedVehicleParts.API.DAL.Entities
                 entity.Property(e => e.PasswordSalt)
                     .HasMaxLength(255)
                     .IsUnicode(false);
-
-                entity.Property(e => e.Username)
-                    .HasMaxLength(255)
-                    .IsUnicode(false);
             });
         }
     }

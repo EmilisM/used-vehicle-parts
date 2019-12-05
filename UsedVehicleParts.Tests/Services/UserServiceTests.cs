@@ -9,6 +9,7 @@ using NUnit.Framework;
 using UsedVehicleParts.API.DAL;
 using UsedVehicleParts.API.DAL.Entities;
 using UsedVehicleParts.API.Services;
+
 namespace UsedVehicleParts.Tests.Services
 {
     [TestFixture]
@@ -84,9 +85,9 @@ namespace UsedVehicleParts.Tests.Services
         [TestCase("usr", "1234567")]
         [TestCase(null, "1234567")]
         [TestCase("123", null)]
-        public void UserService_Authenticate_ThrowsOnEmptyOrNullPasswordOrUsername(string username, string password)
+        public void UserService_Authenticate_ThrowsOnEmptyOrNullPasswordOrEmail(string email, string password)
         {
-            Assert.ThrowsAsync<UsernameOrPasswordInvalidException>(() => _userService.AuthenticateAsync(username, password));
+            Assert.ThrowsAsync<EmailOrPasswordInvalidException>(() => _userService.AuthenticateAsync(email, password));
         }
 
         [Test]
@@ -100,7 +101,7 @@ namespace UsedVehicleParts.Tests.Services
 
             _userService = new UserService(_unitOfWork.Object, _configuration.Object, _cryptographicService.Object);
 
-            Assert.ThrowsAsync<UsernameOrPasswordInvalidException>(() =>
+            Assert.ThrowsAsync<EmailOrPasswordInvalidException>(() =>
                 _userService.AuthenticateAsync("username", "password"));
         }
 
@@ -111,19 +112,20 @@ namespace UsedVehicleParts.Tests.Services
 
             _unitOfWork.Setup(work => work.GetRepository<UserData>()).Returns(repository.Object);
 
-            repository.Setup(repo => repo.Get(It.IsAny<Expression<Func<UserData, bool>>>(), null)).ReturnsAsync(new List<UserData>
-            {
-                new UserData
+            repository.Setup(repo => repo.Get(It.IsAny<Expression<Func<UserData, bool>>>(), null)).ReturnsAsync(
+                new List<UserData>
                 {
-                    PasswordHash = "onetwo"
-                }
-            });
+                    new UserData
+                    {
+                        PasswordHash = "onetwo"
+                    }
+                });
 
             _cryptographicService.Setup(cryptoService => cryptoService.GenerateHash("", "")).Returns("onefour");
 
             _userService = new UserService(_unitOfWork.Object, _configuration.Object, _cryptographicService.Object);
 
-            Assert.ThrowsAsync<UsernameOrPasswordInvalidException>(() =>
+            Assert.ThrowsAsync<EmailOrPasswordInvalidException>(() =>
                 _userService.AuthenticateAsync("username", "password"));
         }
 
@@ -135,9 +137,10 @@ namespace UsedVehicleParts.Tests.Services
         [TestCase("usr", "1234567")]
         [TestCase(null, "1234567")]
         [TestCase("123", null)]
-        public void UserService_Registrate_ThrowsOnEmptyOrNullPasswordOrUsername(string username, string password)
+        [TestCase("qwase9456as", null)]
+        public void UserService_Registrate_ThrowsOnEmptyOrNullPasswordOrEmail(string email, string password)
         {
-            Assert.ThrowsAsync<UsernameOrPasswordInvalidException>(() => _userService.RegistrateAsync(username, password));
+            Assert.ThrowsAsync<EmailOrPasswordInvalidException>(() => _userService.RegistrateAsync(email, password));
         }
 
         [Test]
@@ -152,14 +155,14 @@ namespace UsedVehicleParts.Tests.Services
                 {
                     new UserData
                     {
-                        Username = "username"
+                        Email = "qwewe@gmail.com"
                     }
                 });
 
             _userService = new UserService(_unitOfWork.Object, _configuration.Object, _cryptographicService.Object);
 
-            Assert.ThrowsAsync<UsernameTakenException>(() =>
-                _userService.RegistrateAsync("username", "password"));
+            Assert.ThrowsAsync<EmailTakenException>(() =>
+                _userService.RegistrateAsync("qwewe@gmail.com", "password"));
         }
     }
 }

@@ -43,9 +43,8 @@ namespace UsedVehicleParts.API.Controllers
 
             var userInfoModel = new UserInfoModel
             {
-                Username = user.Username,
-                ContactPhone = user.ContactPhone,
                 Email = user.Email,
+                ContactPhone = user.ContactPhone,
                 Reputation = user.Reputation
             };
 
@@ -62,15 +61,15 @@ namespace UsedVehicleParts.API.Controllers
 
             try
             {
-                var token = await _userService.AuthenticateAsync(loginModel.Username, loginModel.Password);
+                var token = await _userService.AuthenticateAsync(loginModel.Email, loginModel.Password);
 
                 var tokenModel = new TokenModel(token);
 
                 return Ok(tokenModel);
             }
-            catch (UsernameOrPasswordInvalidException)
+            catch (EmailOrPasswordInvalidException)
             {
-                return BadRequest(new ErrorResponseModel("Username or password is invalid"));
+                return BadRequest(new ErrorResponseModel("Email or password is invalid"));
             }
         }
 
@@ -84,15 +83,15 @@ namespace UsedVehicleParts.API.Controllers
 
             try
             {
-                var token = await _userService.RegistrateAsync(loginModel.Username, loginModel.Password);
+                var token = await _userService.RegistrateAsync(loginModel.Email, loginModel.Password);
 
                 var tokenModel = new TokenModel(token);
 
                 return Ok(tokenModel);
             }
-            catch (UsernameTakenException)
+            catch (EmailTakenException)
             {
-                return BadRequest(new ErrorResponseModel("Username is taken"));
+                return BadRequest(new ErrorResponseModel("Email is taken"));
             }
             catch (RegistrationException)
             {

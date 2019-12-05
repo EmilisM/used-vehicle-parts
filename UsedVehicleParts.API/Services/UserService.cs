@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
@@ -28,27 +29,28 @@ namespace UsedVehicleParts.API.Services
             _userRepository = unitOfWork.GetRepository<UserData>();
         }
 
-        public async Task<string> AuthenticateAsync(string username, string password)
+        public async Task<string> AuthenticateAsync(string email, string password)
         {
-            if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password) || username.Length < 4 || password.Length < 8)
+            if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(password) || !IsEmailAddress(email) ||
+                password.Length < 8)
             {
-                throw new UsernameOrPasswordInvalidException();
+                throw new EmailOrPasswordInvalidException();
             }
 
-            var user = await _userRepository.Get(data => data.Username == username);
+            var user = await _userRepository.Get(data => data.Email == email);
 
             var singleUser = user?.FirstOrDefault();
 
             if (singleUser == null)
             {
-                throw new UsernameOrPasswordInvalidException();
+                throw new EmailOrPasswordInvalidException();
             }
 
             var hash = _cryptographicService.GenerateHash(password, singleUser.PasswordSalt);
 
             if (hash != singleUser.PasswordHash)
             {
-                throw new UsernameOrPasswordInvalidException();
+                throw new EmailOrPasswordInvalidException();
             }
 
             var token = CreateJwtToken(singleUser.Id.ToString(), DateTime.Now.AddMinutes(30));
@@ -56,20 +58,21 @@ namespace UsedVehicleParts.API.Services
             return token;
         }
 
-        public async Task<string> RegistrateAsync(string username, string password)
+        public async Task<string> RegistrateAsync(string email, string password)
         {
-            if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password) || username.Length < 4 || password.Length < 8)
+            if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(password) || !IsEmailAddress(email) ||
+                password.Length < 8)
             {
-                throw new UsernameOrPasswordInvalidException();
+                throw new EmailOrPasswordInvalidException();
             }
 
-            var user = await _userRepository.Get(data => data.Username == username);
+            var user = await _userRepository.Get(data => data.Email == email);
 
             var singleUser = user?.FirstOrDefault();
 
             if (singleUser != null)
             {
-                throw new UsernameTakenException();
+                throw new EmailTakenException();
             }
 
             var salt = _cryptographicService.GenerateSalt();
@@ -77,7 +80,7 @@ namespace UsedVehicleParts.API.Services
 
             var userData = new UserData
             {
-                Username = username,
+                Email = email,
                 PasswordSalt = salt,
                 PasswordHash = hash
             };
@@ -85,7 +88,7 @@ namespace UsedVehicleParts.API.Services
             await _userRepository.Create(userData);
             await _unitOfWork.Save();
 
-            var createdUsers = await _userRepository.Get(userEntity => userEntity.Username == username);
+            var createdUsers = await _userRepository.Get(userEntity => userEntity.Email == email);
             var createdUser = createdUsers?.FirstOrDefault();
 
             if (createdUser == null)
@@ -145,6 +148,11 @@ namespace UsedVehicleParts.API.Services
             };
 
             return claims;
+        }
+
+        public bool IsEmailAddress(string email)
+        {
+            return new EmailAddressAttribute().IsValid(email);
         }
     }
 }

@@ -2,11 +2,11 @@
 
 namespace UsedVehicleParts.API.Services
 {
-    public class UsernameTakenException : Exception
+    public class EmailTakenException : Exception
     {
     }
 
-    public class UsernameOrPasswordInvalidException : Exception
+    public class EmailOrPasswordInvalidException : Exception
     {
     }
 

@@ -2,7 +2,6 @@
 {
     public class UserData : Entity
     {
-        public string Username { get; set; }
         public string PasswordSalt { get; set; }
         public string PasswordHash { get; set; }
         public int? Reputation { get; set; }

@@ -1,11 +1,13 @@
 import React from "react";
 import styled from "styled-components";
+import { ActionMeta } from "react-select";
 
 import {
   MakeOption,
   ModelOption,
   TrimOption,
-  PartClassOption
+  PartClassOption,
+  Nullable
 } from "../Reducers/home";
 
 import InputTitle from "../Components/inputTitle";
@@ -45,12 +47,12 @@ const PartClassDropdownStyled = styled(PartClassDropdown)`
 `;
 
 export interface SearchCardProps {
-  make?: MakeOption;
-  model?: ModelOption;
-  trims?: TrimOption[];
-  partClasses?: PartClassOption[];
-  setMake: (value: MakeOption) => void;
-  setModel: (value: ModelOption) => void;
+  make: Nullable<ModelOption>;
+  model: Nullable<ModelOption>;
+  trims: Nullable<TrimOption[]>;
+  partClasses: Nullable<PartClassOption[]>;
+  setMake: (value: MakeOption, action: ActionMeta) => void;
+  setModel: (value: ModelOption, action: ActionMeta) => void;
   setTrims: (value: TrimOption[]) => void;
   setPartClasses: (value: PartClassOption[]) => void;
 }

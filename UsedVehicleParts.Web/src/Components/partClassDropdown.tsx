@@ -3,13 +3,13 @@ import { Props } from "react-select/async";
 import useFetch from "use-http";
 
 import { partClassGetAll, PartClassResponse } from "../Api/api";
-import { PartClassOption } from "../Reducers/home";
+import { PartClassOption, Nullable } from "../Reducers/home";
 
 import BaseDropdownStyled from "./baseDropdown";
 
 interface PartClassDropdownProps {
   className?: string;
-  value?: PartClassOption[];
+  value: Nullable<PartClassOption[]>;
   onChange: (value: PartClassOption[]) => void;
 }
 

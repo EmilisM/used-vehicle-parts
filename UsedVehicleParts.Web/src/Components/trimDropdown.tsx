@@ -3,15 +3,20 @@ import { Props } from "react-select/async";
 import useFetch from "use-http";
 
 import { TrimResponse, trimGetAll } from "../Api/api";
-import { MakeOption, ModelOption, TrimOption } from "../Reducers/home";
+import {
+  MakeOption,
+  ModelOption,
+  TrimOption,
+  Nullable
+} from "../Reducers/home";
 
 import BaseDropdownStyled from "./baseDropdown";
 
 interface TrimDropdownProps {
   className?: string;
-  value?: TrimOption[];
+  value: Nullable<TrimOption[]>;
   onChange: (value: TrimOption[]) => void;
-  model?: ModelOption;
+  model: Nullable<ModelOption>;
 }
 
 function TrimDropdownStyled(props: Props<MakeOption>) {
@@ -28,7 +33,7 @@ const TrimDropdown = ({
 
   const loadOptions = (inputValue: string) =>
     new Promise(resolve => {
-      get(trimGetAll(inputValue, model && model.value)).then(
+      get(trimGetAll(inputValue, model ? model.value : undefined)).then(
         (data: TrimResponse[]) => {
           if (!data) {
             return resolve();

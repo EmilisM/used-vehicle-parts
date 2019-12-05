@@ -1,16 +1,17 @@
 import React from "react";
 import { Props } from "react-select/async";
+import { ActionMeta } from "react-select";
 import useFetch from "use-http";
 
 import { makeGetAll, MakeResponse } from "../Api/api";
-import { MakeOption } from "../Reducers/home";
+import { MakeOption, Nullable } from "../Reducers/home";
 
 import BaseDropdownStyled from "./baseDropdown";
 
 interface MakeDropdownProps {
   className?: string;
-  value?: MakeOption;
-  onChange: (value: MakeOption) => void;
+  value: Nullable<MakeOption>;
+  onChange: (value: MakeOption, action: ActionMeta) => void;
 }
 
 function MakeDropdownStyled(props: Props<MakeOption>) {
@@ -45,7 +46,7 @@ const MakeDropdown = ({ className, value, onChange }: MakeDropdownProps) => {
       openMenuOnClick={false}
       isClearable
       value={value}
-      onChange={value => onChange(value as MakeOption)}
+      onChange={(value, action) => onChange(value as MakeOption, action)}
     />
   );
 };

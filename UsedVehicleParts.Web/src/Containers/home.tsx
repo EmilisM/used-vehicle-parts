@@ -13,6 +13,7 @@ import {
   TrimOption,
   PartClassOption
 } from "../Reducers/home";
+import { ActionMeta } from "react-select";
 
 const HomeStyled = styled.div`
   width: 100%;
@@ -34,11 +35,20 @@ const SecondColumn = styled.div`
 const Home = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
-  const setMake = (value: MakeOption) => {
+  const setMake = (value: MakeOption, action: ActionMeta) => {
+    if (action.action === "clear") {
+      dispatch(HomeActions.setModel(null));
+      dispatch(HomeActions.setTrims(null));
+    }
+
     dispatch(HomeActions.setMake(value));
   };
 
-  const setModel = (value: ModelOption) => {
+  const setModel = (value: ModelOption, action: ActionMeta) => {
+    if (action.action === "clear") {
+      dispatch(HomeActions.setTrims(null));
+    }
+
     dispatch(HomeActions.setModel(value));
   };
 

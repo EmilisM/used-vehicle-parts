@@ -15,6 +15,10 @@ const BaseDropdownStyled = styled(AsyncSelect)`
   .${({ classNamePrefix }) => classNamePrefix}__clear-indicator {
     color: ${colors.primaryColor};
   }
+
+  .${({ classNamePrefix }) => classNamePrefix}__single-value {
+    color: ${colors.textPrimary};
+  }
 `;
 
 export default BaseDropdownStyled;

@@ -1,4 +1,4 @@
-﻿import React, { useReducer } from "react";
+﻿import React, { useReducer, ChangeEvent } from "react";
 import styled from "styled-components";
 
 import Card from "../Blocks/card";
@@ -60,18 +60,20 @@ const Home = () => {
     dispatch(HomeActions.setPartClasses(value));
   };
 
+  const setPartName = (event: ChangeEvent<HTMLInputElement>) => {
+    dispatch(HomeActions.setPartName(event.target.value));
+  };
+
   return (
     <HomeStyled>
       <FirstColumn>
         <SearchCard
-          make={state.make}
+          {...state}
           setMake={setMake}
-          model={state.model}
           setModel={setModel}
-          trims={state.trims}
           setTrims={setTrims}
-          partClasses={state.partClasses}
           setPartClasses={setPartClasses}
+          setPartName={setPartName}
         />
       </FirstColumn>
       <SecondColumn>

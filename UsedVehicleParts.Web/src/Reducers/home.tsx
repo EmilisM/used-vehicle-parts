@@ -15,12 +15,14 @@ export type HomeState = {
   model: Nullable<ModelOption>;
   trims: Nullable<TrimOption[]>;
   partClasses: Nullable<PartClassOption[]>;
+  partName: string;
 };
 
 export const SET_MAKE = "SET_MAKE";
 export const SET_MODEL = "SET_MODEL";
 export const SET_TRIMS = "SET_TRIMS";
 export const SET_PART_CLASSES = "SET_PART_CLASSES";
+export const SET_PART_NAME = "SET_PART_NAME";
 
 export const HomeActions = {
   setMake: createActionPayload<typeof SET_MAKE, Nullable<MakeOption>>(SET_MAKE),
@@ -33,7 +35,8 @@ export const HomeActions = {
   setPartClasses: createActionPayload<
     typeof SET_PART_CLASSES,
     Nullable<PartClassOption[]>
-  >(SET_PART_CLASSES)
+  >(SET_PART_CLASSES),
+  setPartName: createActionPayload<typeof SET_PART_NAME, string>(SET_PART_NAME)
 };
 
 export type HomeAcceptedActions = ActionsUnion<typeof HomeActions>;
@@ -42,7 +45,8 @@ export const initialState: HomeState = {
   make: null,
   model: null,
   trims: null,
-  partClasses: null
+  partClasses: null,
+  partName: ""
 };
 
 export function reducer(
@@ -58,6 +62,8 @@ export function reducer(
       return { ...state, trims: action.payload };
     case SET_PART_CLASSES:
       return { ...state, partClasses: action.payload };
+    case SET_PART_NAME:
+      return { ...state, partName: action.payload };
     default:
       return state;
   }

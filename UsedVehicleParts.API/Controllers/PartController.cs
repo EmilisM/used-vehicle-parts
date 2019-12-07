@@ -29,14 +29,15 @@ namespace UsedVehicleParts.API.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public async Task<ActionResult<IEnumerable<Part>>> Get([FromQuery] string name, [FromQuery] int[] trimIds,
-            [FromQuery] int[] partClassIds)
+        public async Task<ActionResult<IEnumerable<Part>>> Get([FromQuery] string name, [FromQuery] int[] trimId,
+            [FromQuery] int[] partClassId)
         {
             var makes = await _partRepository.Get(
                 part =>
-                    (string.IsNullOrWhiteSpace(name) || part.Name != null && part.Name.ToLower().Contains(name.ToLower())) &&
-                    (trimIds != null || trimIds.Contains(part.TrimId)) &&
-                    (partClassIds != null || partClassIds.Contains(part.PartClassId)),
+                    (string.IsNullOrWhiteSpace(name) ||
+                     part.Name != null && part.Name.ToLower().Contains(name.ToLower())) &&
+                    (trimId.Length <= 0 || trimId.Contains(part.TrimId)) &&
+                    (partClassId.Length <= 0 || partClassId.Contains(part.PartClassId)),
                 _includeProperties);
 
             return Ok(makes);

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -28,15 +29,14 @@ namespace UsedVehicleParts.API.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public async Task<ActionResult<IEnumerable<Part>>> Get([FromQuery] string query, [FromQuery] string[] trimId)
+        public async Task<ActionResult<IEnumerable<Part>>> Get([FromQuery] string name, [FromQuery] int[] trimIds,
+            [FromQuery] int[] partClassIds)
         {
-            var queryLower = query.ToLower();
-
             var makes = await _partRepository.Get(
-                part => string.IsNullOrWhiteSpace(query) ||
-                        part.Name.ToLower().Contains(queryLower) ||
-                        part.PartNumber.ToLower().Contains(queryLower) ||
-                        part.Manufacturer.ToLower().Contains(queryLower),
+                part =>
+                    (string.IsNullOrWhiteSpace(name) || part.Name != null && part.Name.ToLower().Contains(name.ToLower())) &&
+                    (trimIds != null || trimIds.Contains(part.TrimId)) &&
+                    (partClassIds != null || partClassIds.Contains(part.PartClassId)),
                 _includeProperties);
 
             return Ok(makes);

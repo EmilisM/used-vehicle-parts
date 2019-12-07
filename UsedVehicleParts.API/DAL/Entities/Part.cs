@@ -15,7 +15,7 @@ namespace UsedVehicleParts.API.DAL.Entities
         public int PartClassId { get; set; }
         public int ImageId { get; set; }
         public int TrimId { get; set; }
-        public int BuyerId { get; set; }
+        public int? BuyerId { get; set; }
         public int SellerId { get; set; }
 
         public virtual UserData Buyer { get; set; }

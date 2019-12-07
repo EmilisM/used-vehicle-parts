@@ -80,11 +80,7 @@ namespace UsedVehicleParts.API.DAL.Entities
 
                 entity.Property(e => e.ProductionYearTo).HasColumnType("date");
 
-                entity.HasOne(d => d.Make)
-                    .WithMany(p => p.Model)
-                    .HasForeignKey(d => d.MakeId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Model__MakeID__3F466844");
+                entity.HasOne(d => d.Make);
             });
 
             modelBuilder.Entity<Part>(entity =>
@@ -122,34 +118,15 @@ namespace UsedVehicleParts.API.DAL.Entities
 
                 entity.Property(e => e.TrimId).HasColumnName("TrimID");
 
-                entity.HasOne(d => d.Buyer)
-                    .WithMany(p => p.PartBuyer)
-                    .HasForeignKey(d => d.BuyerId)
-                    .HasConstraintName("FK__Part__BuyerID__46E78A0C");
+                entity.HasOne(d => d.Buyer);
 
-                entity.HasOne(d => d.Image)
-                    .WithMany(p => p.Part)
-                    .HasForeignKey(d => d.ImageId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Part__ImageID__45F365D3");
+                entity.HasOne(d => d.Image);
 
-                entity.HasOne(d => d.PartClass)
-                    .WithMany(p => p.Part)
-                    .HasForeignKey(d => d.PartClassId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Part__PartClassI__44FF419A");
+                entity.HasOne(d => d.PartClass);
 
-                entity.HasOne(d => d.Seller)
-                    .WithMany(p => p.PartSeller)
-                    .HasForeignKey(d => d.SellerId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Part__SellerID__48CFD27E");
+                entity.HasOne(d => d.Seller);
 
-                entity.HasOne(d => d.Trim)
-                    .WithMany(p => p.Part)
-                    .HasForeignKey(d => d.TrimId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Part__TrimID__47DBAE45");
+                entity.HasOne(d => d.Trim);
             });
 
             modelBuilder.Entity<PartClass>(entity =>
@@ -177,11 +154,7 @@ namespace UsedVehicleParts.API.DAL.Entities
                     .HasMaxLength(255)
                     .IsUnicode(false);
 
-                entity.HasOne(d => d.Part)
-                    .WithMany(p => p.SpecificationValue)
-                    .HasForeignKey(d => d.PartId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Specifica__PartI__4BAC3F29");
+                entity.HasOne(d => d.Part);
             });
 
             modelBuilder.Entity<Trim>(entity =>
@@ -199,11 +172,7 @@ namespace UsedVehicleParts.API.DAL.Entities
 
                 entity.Property(e => e.ProductionYearTo).HasColumnType("date");
 
-                entity.HasOne(d => d.Model)
-                    .WithMany(p => p.Trim)
-                    .HasForeignKey(d => d.ModelId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Trim__ModelID__4222D4EF");
+                entity.HasOne(d => d.Model);
             });
 
             modelBuilder.Entity<UserData>(entity =>

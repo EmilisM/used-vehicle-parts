@@ -19,6 +19,11 @@ import PartClassDropdown from "../Components/partClassDropdown";
 
 import Card from "./card";
 
+const SearchCardStyled = styled(Card)`
+  position: sticky;
+  top: 86px;
+`;
+
 const fieldStyle = `
   margin-top: 10px;
 `;
@@ -81,7 +86,7 @@ const SearchCard = ({
   setPartName
 }: SearchCardProps) => {
   return (
-    <Card title="Search">
+    <SearchCardStyled title="Search">
       <div>
         <InputTitle>Make</InputTitle>
         <MakeDropdownStyled value={make} onChange={setMake} />
@@ -99,9 +104,13 @@ const SearchCard = ({
       </PartClassContainer>
       <PartContainer>
         <InputTitle>Part name</InputTitle>
-        <InputStyled value={partName} onChange={setPartName} placeholder="Part name" />
+        <InputStyled
+          value={partName}
+          onChange={setPartName}
+          placeholder="Part name"
+        />
       </PartContainer>
-    </Card>
+    </SearchCardStyled>
   );
 };
 

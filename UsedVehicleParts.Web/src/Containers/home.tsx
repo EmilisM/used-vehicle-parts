@@ -1,5 +1,6 @@
-﻿import React, { useReducer, ChangeEvent } from "react";
+﻿import React, { useReducer, ChangeEvent, useEffect, useCallback } from "react";
 import styled from "styled-components";
+import useFetch from "use-http";
 
 import SearchCard from "../Blocks/searchCard";
 import PartListCard from "../Blocks/partListCard";
@@ -14,7 +15,7 @@ import {
   PartClassOption
 } from "../Reducers/home";
 import { ActionMeta } from "react-select";
-import { PartResponse } from "../Api/api";
+import { partGetAll, PartResponse } from "../Api/api";
 
 const HomeStyled = styled.div`
   width: 100%;
@@ -35,6 +36,7 @@ const SecondColumn = styled.div`
 
 const Home = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
+  const { get } = useFetch();
 
   const setMake = (value: MakeOption, action: ActionMeta) => {
     if (action.action === "clear") {
@@ -65,9 +67,26 @@ const Home = () => {
     dispatch(HomeActions.setPartName(event.target.value));
   };
 
-  const setParts = (value: PartResponse[]) => {
+  const setParts = useCallback((value: PartResponse[]) => {
     dispatch(HomeActions.setParts(value));
-  };
+  }, []);
+
+  useEffect(() => {
+    let isActive = true;
+
+    const partClassIds = state.partClasses
+      ? state.partClasses.map(partClass => partClass.value)
+      : undefined;
+    const trimIds = state.trims ? state.trims.map(trim => trim.value) : undefined;
+
+    get(partGetAll(state.partName, partClassIds, trimIds)).then(
+      parts => isActive && setParts(parts)
+    );
+
+    return () => {
+      isActive = false;
+    };
+  }, [state.partName, state.partClasses, state.trims, get, setParts]);
 
   return (
     <HomeStyled>
@@ -83,10 +102,6 @@ const Home = () => {
       </FirstColumn>
       <SecondColumn>
         <PartListCard
-          partName={state.partName}
-          partClasses={state.partClasses}
-          trims={state.trims}
-          setParts={setParts}
           parts={state.parts}
         />
       </SecondColumn>

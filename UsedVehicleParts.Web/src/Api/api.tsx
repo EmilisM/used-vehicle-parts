@@ -14,7 +14,7 @@ interface Model {
   productionYearFrom?: string;
   productionYearTo?: string;
   makeId: number;
-  make?: MakeResponse;
+  make: MakeResponse;
 }
 
 export interface ModelRequest extends Model {}
@@ -28,7 +28,7 @@ interface Trim {
   productionYearFrom?: string;
   productionYearTo?: string;
   modelId: number;
-  model?: Model;
+  model: Model;
 }
 
 export interface TrimRequest extends Trim {}
@@ -48,7 +48,7 @@ export interface PartClassResponse extends PartClass {
 }
 
 interface Image {
-  ImageUrl: string;
+  imageUrl: string;
 }
 
 export interface ImageRequest extends Image {}

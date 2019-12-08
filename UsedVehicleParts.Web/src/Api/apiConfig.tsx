@@ -22,7 +22,7 @@ api.interceptors.response.use(
       sessionStorage.removeItem("token");
     }
 
-    return error;
+    return Promise.reject(error);
   }
 );
 

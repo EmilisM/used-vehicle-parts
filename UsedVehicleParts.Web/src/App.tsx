@@ -15,7 +15,8 @@ const AppBase = styled.div`
 
 const Content = styled.div`
   flex: 1;
-  padding: 20px;
+  padding: 30px;
+  margin-top: 56px;
 `;
 
 function App() {

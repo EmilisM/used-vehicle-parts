@@ -1,4 +1,5 @@
 import { createActionPayload, ActionsUnion } from "./types";
+import { PartResponse } from "../Api/api";
 
 export type MakeOption = { label: string; value: number };
 
@@ -16,6 +17,7 @@ export type HomeState = {
   trims: Nullable<TrimOption[]>;
   partClasses: Nullable<PartClassOption[]>;
   partName: string;
+  parts: PartResponse[];
 };
 
 export const SET_MAKE = "SET_MAKE";
@@ -23,6 +25,7 @@ export const SET_MODEL = "SET_MODEL";
 export const SET_TRIMS = "SET_TRIMS";
 export const SET_PART_CLASSES = "SET_PART_CLASSES";
 export const SET_PART_NAME = "SET_PART_NAME";
+export const SET_PARTS = "SET_PARTS";
 
 export const HomeActions = {
   setMake: createActionPayload<typeof SET_MAKE, Nullable<MakeOption>>(SET_MAKE),
@@ -36,7 +39,8 @@ export const HomeActions = {
     typeof SET_PART_CLASSES,
     Nullable<PartClassOption[]>
   >(SET_PART_CLASSES),
-  setPartName: createActionPayload<typeof SET_PART_NAME, string>(SET_PART_NAME)
+  setPartName: createActionPayload<typeof SET_PART_NAME, string>(SET_PART_NAME),
+  setParts: createActionPayload<typeof SET_PARTS, PartResponse[]>(SET_PARTS)
 };
 
 export type HomeAcceptedActions = ActionsUnion<typeof HomeActions>;
@@ -46,7 +50,8 @@ export const initialState: HomeState = {
   model: null,
   trims: null,
   partClasses: null,
-  partName: ""
+  partName: "",
+  parts: []
 };
 
 export function reducer(
@@ -64,6 +69,8 @@ export function reducer(
       return { ...state, partClasses: action.payload };
     case SET_PART_NAME:
       return { ...state, partName: action.payload };
+    case SET_PARTS:
+      return { ...state, parts: action.payload };
     default:
       return state;
   }

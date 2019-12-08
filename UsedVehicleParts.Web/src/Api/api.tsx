@@ -47,6 +47,72 @@ export interface PartClassResponse extends PartClass {
   id: number;
 }
 
+interface Image {
+  ImageUrl: string;
+}
+
+export interface ImageRequest extends Image {}
+
+export interface ImageResponse extends Image {
+  id: number;
+}
+
+export interface User {
+  reputation?: number;
+  email: string;
+  contactPhone: string;
+}
+
+interface Part {
+  name: string;
+  productionYearStart?: string;
+  productionYearTo?: string;
+  manufacturer?: string;
+  qualityGrade: number;
+  price: number;
+  priceUnits?: string;
+  partNumber?: string;
+  partClassId: number;
+  imageId: number;
+  trimId: number;
+  buyerId?: number;
+  sellerId: number;
+  partClass: PartClass;
+  image: Image;
+  buyer?: User;
+  seller: User;
+  trim: Trim;
+}
+
+export interface PartRequest extends Part {}
+
+export interface PartResponse extends Part {
+  id: number;
+}
+
+interface SpecificationValue {
+  name: string;
+  value: number;
+  units?: string;
+  partId: number;
+  part: Part;
+}
+
+export interface SpecificationValueRequest extends SpecificationValue {}
+
+export interface SpecificationValueResponse extends SpecificationValue {
+  id: number;
+}
+
+export interface Token {
+  token: string;
+}
+
+export interface Login {
+  email: string;
+  password: string;
+}
+
 export const makeGetAll = (name?: string) => `/api/make?name=${name}`;
 
 export const modelGetAll = (name?: string, makeId?: number) =>
@@ -56,3 +122,20 @@ export const trimGetAll = (name?: string, modelId?: number) =>
   `/api/trim?name=${name}&modelId=${modelId || ""}`;
 
 export const partClassGetAll = (name?: string) => `/api/partclass?name=${name}`;
+
+export const partGetAll = (
+  name?: string,
+  partClassIds?: number[],
+  trimIds?: number[]
+) => {
+  const nameRoute = name ? `&name=${name}` : "";
+  const partClassIdRoute = partClassIds
+    ? partClassIds.map(partClassId => `&partClassId=${partClassId}`).join("")
+    : "";
+
+  const trimIdRoute = trimIds
+    ? trimIds.map(trimId => `&trimId=${trimId}`).join("")
+    : "";
+
+  return `/api/part?${nameRoute}${partClassIdRoute}${trimIdRoute}`;
+};

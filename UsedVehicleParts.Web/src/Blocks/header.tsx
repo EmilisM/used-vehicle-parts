@@ -8,6 +8,7 @@ import routes from "../Constants/routes";
 const HeaderStyled = styled.header`
   width: 100%;
   height: 56px;
+  min-height: 56px
   display: flex;
   align-items: center;
   background: ${colors.primaryColor};
@@ -22,8 +23,9 @@ const HeaderStyled = styled.header`
     ${colors.secondaryColor}
   );
   padding: 10px;
-  position: sticky;
+  position: fixed;
   top: 0;
+  z-index: 1000;
 `;
 
 const HeaderTitleLinkStyled = styled(Link)`

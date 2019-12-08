@@ -1,8 +1,8 @@
 ﻿import React, { useReducer, ChangeEvent } from "react";
 import styled from "styled-components";
 
-import Card from "../Blocks/card";
 import SearchCard from "../Blocks/searchCard";
+import PartListCard from "../Blocks/partListCard";
 
 import {
   reducer,
@@ -14,6 +14,7 @@ import {
   PartClassOption
 } from "../Reducers/home";
 import { ActionMeta } from "react-select";
+import { PartResponse } from "../Api/api";
 
 const HomeStyled = styled.div`
   width: 100%;
@@ -27,8 +28,8 @@ const FirstColumn = styled.div`
 `;
 
 const SecondColumn = styled.div`
-  margin-left: 20px
-  max-width: 800px;
+  margin-left: 40px
+  max-width: 1000px;
   width: 100%
 `;
 
@@ -64,6 +65,10 @@ const Home = () => {
     dispatch(HomeActions.setPartName(event.target.value));
   };
 
+  const setParts = (value: PartResponse[]) => {
+    dispatch(HomeActions.setParts(value));
+  };
+
   return (
     <HomeStyled>
       <FirstColumn>
@@ -77,7 +82,13 @@ const Home = () => {
         />
       </FirstColumn>
       <SecondColumn>
-        <Card>Home</Card>
+        <PartListCard
+          partName={state.partName}
+          partClasses={state.partClasses}
+          trims={state.trims}
+          setParts={setParts}
+          parts={state.parts}
+        />
       </SecondColumn>
     </HomeStyled>
   );

@@ -110,9 +110,17 @@ const NoParts = styled.div`
   font-size: 18px;
 `;
 
+const LoaderContainer = styled.div`
+  display: flex;
+  width: 100%;
+  justify-content: center;
+`;
+
 const PartList = ({ parts, loading }: PartListProps) =>
   loading ? (
-    <Loader />
+    <LoaderContainer>
+      <Loader />
+    </LoaderContainer>
   ) : parts.length <= 0 ? (
     <NoParts>No parts</NoParts>
   ) : (
@@ -149,8 +157,7 @@ const PartList = ({ parts, loading }: PartListProps) =>
                     Seller: <span>{part.seller.email}</span>
                     {part.seller.reputation && (
                       <Fragment>
-                        , Reputation:{" "}
-                        <span>{part.seller.reputation}</span>
+                        , Reputation: <span>{part.seller.reputation}</span>
                       </Fragment>
                     )}
                   </PartListItemContentDetailsSeller>

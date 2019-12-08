@@ -3,13 +3,6 @@ import styled from "styled-components";
 
 import colors from "../Constants/colors";
 
-const LoaderContainer = styled.div`
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`;
-
 interface LoaderProps {
   className?: string;
 }
@@ -35,9 +28,7 @@ const LoaderStyled = styled.div`
 `;
 
 const Loader = ({ className }: LoaderProps) => (
-  <LoaderContainer>
-    <LoaderStyled className={className} />
-  </LoaderContainer>
+  <LoaderStyled className={className} />
 );
 
 export default Loader;

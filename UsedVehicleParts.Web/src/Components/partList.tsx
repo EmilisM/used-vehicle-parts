@@ -1,13 +1,15 @@
-import React from "react";
+import React, { Fragment } from "react";
 import styled from "styled-components";
 
 import colors from "../Constants/colors";
 import { PartResponse } from "../Api/api";
 
 import PartListItemQuality from "../Components/partListItemQuality";
+import Loader from "../Components/loader";
 
 interface PartListProps {
   parts: PartResponse[];
+  loading: boolean;
 }
 
 const PartListStyled = styled.div`
@@ -100,57 +102,73 @@ const PartListItemContentDetailsQuality = styled.div`
   align-items: flex-start;
 `;
 
-const PartList = ({ parts }: PartListProps) => (
-  <PartListStyled>
-    {parts.map((part, index) => {
-      return [
-        <PartListItem
-          key={`${part.partNumber}-${part.name}-${part.qualityGrade}`}
-        >
-          <PartListItemImageContainer>
-            <PartListItemImage src={part.image.imageUrl} alt="logo" />
-          </PartListItemImageContainer>
-          <PartListItemContent>
-            <PartListItemContentName>{part.name}</PartListItemContentName>
-            <PartListItemContentDetails>
-              <PartListItemContentDetailsSpecs>
-                <PartListItemContentDetailsManufacturer>
-                  Manufacturer: <span>{part.manufacturer}</span>
-                </PartListItemContentDetailsManufacturer>
-                <PartListItemContentDetailsCar>
-                  For:{" "}
-                  <span>
-                    {part.trim.model.make.name}, {part.trim.model.name},{" "}
-                    {part.trim.name}
-                  </span>
-                </PartListItemContentDetailsCar>
-                <PartListItemContentDetailsPrice>
-                  Price:{" "}
-                  <span>
-                    {part.price} {part.priceUnits}
-                  </span>
-                </PartListItemContentDetailsPrice>
-                <PartListItemContentDetailsSeller>
-                  Seller: <span>{part.seller.email}</span>
-                  {part.seller.reputation
-                    ? `, Reputation: ${(<span>{part.seller.reputation}</span>)}`
-                    : null}
-                </PartListItemContentDetailsSeller>
-              </PartListItemContentDetailsSpecs>
-              <PartListItemContentDetailsQuality>
-                <PartListItemQuality quality={part.qualityGrade} />
-              </PartListItemContentDetailsQuality>
-            </PartListItemContentDetails>
-          </PartListItemContent>
-        </PartListItem>,
-        parts.length !== index + 1 ? (
-          <PartListItemSeparator
-            key={`${part.partNumber}-${part.name}-${part.qualityGrade}-separator`}
-          />
-        ) : null
-      ];
-    })}
-  </PartListStyled>
-);
+const NoParts = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: 600;
+  font-size: 18px;
+`;
+
+const PartList = ({ parts, loading }: PartListProps) =>
+  loading ? (
+    <Loader />
+  ) : parts.length <= 0 ? (
+    <NoParts>No parts</NoParts>
+  ) : (
+    <PartListStyled>
+      {parts.map((part, index) => {
+        return [
+          <PartListItem
+            key={`${part.partNumber}-${part.name}-${part.qualityGrade}`}
+          >
+            <PartListItemImageContainer>
+              <PartListItemImage src={part.image.imageUrl} alt="logo" />
+            </PartListItemImageContainer>
+            <PartListItemContent>
+              <PartListItemContentName>{part.name}</PartListItemContentName>
+              <PartListItemContentDetails>
+                <PartListItemContentDetailsSpecs>
+                  <PartListItemContentDetailsManufacturer>
+                    Manufacturer: <span>{part.manufacturer}</span>
+                  </PartListItemContentDetailsManufacturer>
+                  <PartListItemContentDetailsCar>
+                    For:{" "}
+                    <span>
+                      {part.trim.model.make.name}, {part.trim.model.name},{" "}
+                      {part.trim.name}
+                    </span>
+                  </PartListItemContentDetailsCar>
+                  <PartListItemContentDetailsPrice>
+                    Price:{" "}
+                    <span>
+                      {part.price} {part.priceUnits}
+                    </span>
+                  </PartListItemContentDetailsPrice>
+                  <PartListItemContentDetailsSeller>
+                    Seller: <span>{part.seller.email}</span>
+                    {part.seller.reputation && (
+                      <Fragment>
+                        , Reputation:
+                        <span>{part.seller.reputation}</span>
+                      </Fragment>
+                    )}
+                  </PartListItemContentDetailsSeller>
+                </PartListItemContentDetailsSpecs>
+                <PartListItemContentDetailsQuality>
+                  <PartListItemQuality quality={part.qualityGrade} />
+                </PartListItemContentDetailsQuality>
+              </PartListItemContentDetails>
+            </PartListItemContent>
+          </PartListItem>,
+          parts.length !== index + 1 ? (
+            <PartListItemSeparator
+              key={`${part.partNumber}-${part.name}-${part.qualityGrade}-separator`}
+            />
+          ) : null
+        ];
+      })}
+    </PartListStyled>
+  );
 
 export default PartList;

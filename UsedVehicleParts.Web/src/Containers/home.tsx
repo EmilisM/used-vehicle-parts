@@ -71,22 +71,46 @@ const Home = () => {
     dispatch(HomeActions.setParts(value));
   }, []);
 
+  const setQualityGrade = (event: ChangeEvent<HTMLInputElement>) => {
+    dispatch(HomeActions.setQualityGrade(event.target.value));
+  };
+
+  const setPartsLoading = (value: boolean) => {
+    dispatch(HomeActions.setPartsLoading(value));
+  };
+
   useEffect(() => {
     let isActive = true;
+
+    setPartsLoading(true);
 
     const partClassIds = state.partClasses
       ? state.partClasses.map(partClass => partClass.value)
       : undefined;
-    const trimIds = state.trims ? state.trims.map(trim => trim.value) : undefined;
+    const trimIds = state.trims
+      ? state.trims.map(trim => trim.value)
+      : undefined;
 
-    get(partGetAll(state.partName, partClassIds, trimIds)).then(
-      parts => isActive && setParts(parts)
-    );
+    get(
+      partGetAll(state.partName, partClassIds, trimIds, state.qualityGrade)
+    ).then(parts => {
+      if (isActive) {
+        setParts(parts);
+        setPartsLoading(false);
+      }
+    });
 
     return () => {
       isActive = false;
     };
-  }, [state.partName, state.partClasses, state.trims, get, setParts]);
+  }, [
+    state.partName,
+    state.partClasses,
+    state.trims,
+    state.qualityGrade,
+    get,
+    setParts
+  ]);
 
   return (
     <HomeStyled>
@@ -98,12 +122,11 @@ const Home = () => {
           setTrims={setTrims}
           setPartClasses={setPartClasses}
           setPartName={setPartName}
+          setQualityGrade={setQualityGrade}
         />
       </FirstColumn>
       <SecondColumn>
-        <PartListCard
-          parts={state.parts}
-        />
+        <PartListCard parts={state.parts} loading={state.partsLoading} />
       </SecondColumn>
     </HomeStyled>
   );

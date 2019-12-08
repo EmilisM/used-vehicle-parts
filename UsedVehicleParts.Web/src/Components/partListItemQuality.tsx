@@ -4,19 +4,19 @@ import styled from "styled-components";
 import colors from "../Constants/colors";
 
 const getQualitySettings = (quality: number) => {
-  if (quality < 3) {
+  if (quality < 4) {
     return `border-color: ${colors.gray};
     border-bottom-color: ${colors.ratingTerribleColor};`;
-  } else if (quality >= 3 && quality < 6) {
+  } else if (quality >= 4 && quality < 7) {
     return `border-color: ${colors.gray};
     border-left-color: ${colors.ratingBadColor};
     border-bottom-color: ${colors.ratingBadColor};`;
-  } else if (quality >= 6 && quality <= 8) {
+  } else if (quality >= 7 && quality <= 9) {
     return `border-color: ${colors.gray};
     border-left-color: ${colors.ratingGoodColor};
     border-bottom-color: ${colors.ratingGoodColor};
     border-top-color: ${colors.ratingGoodColor};`;
-  } else if (quality > 8) {
+  } else if (quality >= 10) {
     return `border-color: ${colors.ratingPerfectColor};`;
   }
 };

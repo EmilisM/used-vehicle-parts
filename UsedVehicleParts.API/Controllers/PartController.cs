@@ -37,7 +37,7 @@ namespace UsedVehicleParts.API.Controllers
                 part =>
                     (string.IsNullOrWhiteSpace(name) ||
                      part.Name != null && part.Name.ToLower().Contains(name.ToLower())) &&
-                    (qualityGrade <= 0 || part.QualityGrade == qualityGrade) &&
+                    (qualityGrade <= 0 || part.QualityGrade >= qualityGrade) &&
                     (trimId.Length <= 0 || trimId.Contains(part.TrimId)) &&
                     (partClassId.Length <= 0 || partClassId.Contains(part.PartClassId)),
                 _includeProperties);

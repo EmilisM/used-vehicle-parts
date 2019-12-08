@@ -18,6 +18,8 @@ export type HomeState = {
   partClasses: Nullable<PartClassOption[]>;
   partName: string;
   parts: PartResponse[];
+  qualityGrade: string;
+  partsLoading: boolean;
 };
 
 export const SET_MAKE = "SET_MAKE";
@@ -26,6 +28,8 @@ export const SET_TRIMS = "SET_TRIMS";
 export const SET_PART_CLASSES = "SET_PART_CLASSES";
 export const SET_PART_NAME = "SET_PART_NAME";
 export const SET_PARTS = "SET_PARTS";
+export const SET_QUALITY_GRADE = "SET_QUALITY_GRADE";
+export const SET_PARTS_LOADING = "SET_PARTS_LOADING";
 
 export const HomeActions = {
   setMake: createActionPayload<typeof SET_MAKE, Nullable<MakeOption>>(SET_MAKE),
@@ -40,7 +44,13 @@ export const HomeActions = {
     Nullable<PartClassOption[]>
   >(SET_PART_CLASSES),
   setPartName: createActionPayload<typeof SET_PART_NAME, string>(SET_PART_NAME),
-  setParts: createActionPayload<typeof SET_PARTS, PartResponse[]>(SET_PARTS)
+  setParts: createActionPayload<typeof SET_PARTS, PartResponse[]>(SET_PARTS),
+  setQualityGrade: createActionPayload<typeof SET_QUALITY_GRADE, string>(
+    SET_QUALITY_GRADE
+  ),
+  setPartsLoading: createActionPayload<typeof SET_PARTS_LOADING, boolean>(
+    SET_PARTS_LOADING
+  )
 };
 
 export type HomeAcceptedActions = ActionsUnion<typeof HomeActions>;
@@ -51,7 +61,9 @@ export const initialState: HomeState = {
   trims: null,
   partClasses: null,
   partName: "",
-  parts: []
+  parts: [],
+  qualityGrade: "",
+  partsLoading: false
 };
 
 export function reducer(
@@ -71,6 +83,10 @@ export function reducer(
       return { ...state, partName: action.payload };
     case SET_PARTS:
       return { ...state, parts: action.payload };
+    case SET_QUALITY_GRADE:
+      return { ...state, qualityGrade: action.payload };
+    case SET_PARTS_LOADING:
+      return { ...state, partsLoading: action.payload };
     default:
       return state;
   }

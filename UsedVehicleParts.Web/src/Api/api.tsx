@@ -126,7 +126,8 @@ export const partClassGetAll = (name?: string) => `/api/partclass?name=${name}`;
 export const partGetAll = (
   name?: string,
   partClassIds?: number[],
-  trimIds?: number[]
+  trimIds?: number[],
+  qualityGrade?: string
 ) => {
   const nameRoute = name ? `&name=${name}` : "";
   const partClassIdRoute = partClassIds
@@ -137,5 +138,7 @@ export const partGetAll = (
     ? trimIds.map(trimId => `&trimId=${trimId}`).join("")
     : "";
 
-  return `/api/part?${nameRoute}${partClassIdRoute}${trimIdRoute}`;
+  const qualityGradeRoute = qualityGrade ? `&qualityGrade=${qualityGrade}` : "";
+
+  return `/api/part?${nameRoute}${qualityGradeRoute}${partClassIdRoute}${trimIdRoute}`;
 };

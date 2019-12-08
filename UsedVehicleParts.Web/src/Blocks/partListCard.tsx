@@ -1,22 +1,19 @@
 import React from "react";
-import styled from "styled-components";
 
 import PartList from "../Components/partList";
 import Card from "./card";
 import { PartResponse } from "../Api/api";
 
-const CardStyled = styled(Card)`
-`;
-
 interface PartListCardProps {
   parts: PartResponse[];
+  loading: boolean;
 }
 
-const PartListCard = ({ parts }: PartListCardProps) => {
+const PartListCard = ({ parts, loading }: PartListCardProps) => {
   return (
-    <CardStyled>
-      <PartList parts={parts} />
-    </CardStyled>
+    <Card>
+      <PartList parts={parts} loading={loading} />
+    </Card>
   );
 };
 

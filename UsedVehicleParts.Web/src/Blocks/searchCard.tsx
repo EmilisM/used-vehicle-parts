@@ -66,11 +66,13 @@ export interface SearchCardProps {
   trims: Nullable<TrimOption[]>;
   partClasses: Nullable<PartClassOption[]>;
   partName: string;
+  qualityGrade: string;
   setMake: (value: MakeOption, action: ActionMeta) => void;
   setModel: (value: ModelOption, action: ActionMeta) => void;
   setTrims: (value: TrimOption[]) => void;
   setPartClasses: (value: PartClassOption[]) => void;
   setPartName: (event: ChangeEvent<HTMLInputElement>) => void;
+  setQualityGrade: (event: ChangeEvent<HTMLInputElement>) => void;
 }
 
 const SearchCard = ({
@@ -79,11 +81,13 @@ const SearchCard = ({
   trims,
   partClasses,
   partName,
+  qualityGrade,
   setMake,
   setModel,
   setTrims,
   setPartClasses,
-  setPartName
+  setPartName,
+  setQualityGrade
 }: SearchCardProps) => {
   return (
     <SearchCardStyled title="Search">
@@ -108,6 +112,12 @@ const SearchCard = ({
           value={partName}
           onChange={setPartName}
           placeholder="Part name"
+        />
+        <TitleStyled>Quality grade</TitleStyled>
+        <InputStyled
+          value={qualityGrade}
+          onChange={setQualityGrade}
+          placeholder="Quality grade"
         />
       </PartContainer>
     </SearchCardStyled>

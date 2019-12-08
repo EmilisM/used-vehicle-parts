@@ -18,7 +18,7 @@ namespace UsedVehicleParts.API.Controllers
         private readonly string[] _includeProperties =
         {
             nameof(Part.Buyer), nameof(Part.Image), nameof(Part.PartClass), nameof(Part.Seller),
-            nameof(Part.Trim)
+            nameof(Part.Trim), $"{nameof(Part.Trim)}.{nameof(Part.Trim.Model)}", $"{nameof(Part.Trim)}.{nameof(Part.Trim.Model)}.{nameof(Part.Trim.Model.Make)}"
         };
 
         public PartController(IUnitOfWork unitOfWork)

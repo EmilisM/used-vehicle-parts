@@ -69,7 +69,8 @@ namespace UsedVehicleParts.API.Controllers
             }
             catch (EmailOrPasswordInvalidException)
             {
-                return BadRequest(new ErrorResponseModel("Email or password is invalid"));
+                ModelState.AddModelError("Form", "Email or password is invalid");
+                return ValidationProblem();
             }
         }
 
@@ -91,7 +92,8 @@ namespace UsedVehicleParts.API.Controllers
             }
             catch (EmailTakenException)
             {
-                return BadRequest(new ErrorResponseModel("Email is taken"));
+                ModelState.AddModelError(nameof(RegistrationModel.Email), "Email is taken");
+                return ValidationProblem();
             }
             catch (RegistrationException)
             {

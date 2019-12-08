@@ -10,7 +10,7 @@ const HeaderStyled = styled.header`
   height: 56px;
   min-height: 56px
   display: flex;
-  align-items: center;
+  align-items: baseline;
   background: ${colors.primaryColor};
   background: -webkit-linear-gradient(
     to right,
@@ -42,6 +42,17 @@ const HeaderTitleLinkStyled = styled(Link)`
 
 const HeaderItemsStyled = styled.div`
   display: flex;
+  margin-left: 20px;
+`;
+
+const HeaderItemLinkStyled = styled(Link)`
+  text-decoration: none;
+  color: ${colors.white};
+  margin: 0px 10px 0px;
+
+  &:hover {
+    color: ${colors.gray};
+  }
 `;
 
 const HeaderTitle = () => (
@@ -50,7 +61,16 @@ const HeaderTitle = () => (
   </HeaderTitleLinkStyled>
 );
 
-const HeaderItems = () => <HeaderItemsStyled />;
+const HeaderItems = () => (
+  <HeaderItemsStyled>
+    <HeaderItemLinkStyled to={routes.newPart}>
+      Submit new part
+    </HeaderItemLinkStyled>
+    <HeaderItemLinkStyled to={routes.login}>Login/Sign up</HeaderItemLinkStyled>
+    <HeaderItemLinkStyled to={routes.login}>Logout</HeaderItemLinkStyled>
+    <HeaderItemLinkStyled to={routes.profile}>Profile</HeaderItemLinkStyled>
+  </HeaderItemsStyled>
+);
 
 const Header = () => (
   <HeaderStyled id="header">

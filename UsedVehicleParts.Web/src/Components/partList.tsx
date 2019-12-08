@@ -149,7 +149,7 @@ const PartList = ({ parts, loading }: PartListProps) =>
                     Seller: <span>{part.seller.email}</span>
                     {part.seller.reputation && (
                       <Fragment>
-                        , Reputation:
+                        , Reputation:{" "}
                         <span>{part.seller.reputation}</span>
                       </Fragment>
                     )}

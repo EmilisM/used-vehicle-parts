@@ -9,6 +9,7 @@ interface InputProps {
   value: string;
   onChange: (event: ChangeEvent<HTMLInputElement>) => void;
   name?: string;
+  type?: string;
 }
 
 const InputStyled = styled.input`
@@ -27,7 +28,8 @@ const Input = ({
   placeholder,
   value,
   onChange,
-  name
+  name,
+  type
 }: InputProps) => (
   <InputStyled
     className={className}
@@ -35,6 +37,7 @@ const Input = ({
     value={value}
     onChange={onChange}
     name={name}
+    type={type}
   />
 );
 

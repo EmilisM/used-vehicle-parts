@@ -10,26 +10,33 @@ const LoaderContainer = styled.div`
   justify-content: center;
 `;
 
+interface LoaderProps {
+  className?: string;
+}
+
 const LoaderStyled = styled.div`
   border-radius: 100%;
-  border: solid 2px ${colors.primaryColor}
+  border: solid 2px ${colors.primaryColor};
   border-bottom-color: transparent;
 
-  width: ${({ width }: { width?: number; height?: number }) => width || 75}px;
-  height: ${({ height }: { width?: number; height?: number }) =>
-    height || 75}px;
+  width: 75px;
+  height: 75px;
 
   animation: spin 0.75s linear infinite;
 
   @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
   }
 `;
 
-const Loader = ({ width, height }: { width?: number; height?: number }) => (
+const Loader = ({ className }: LoaderProps) => (
   <LoaderContainer>
-    <LoaderStyled width={width} height={height} />
+    <LoaderStyled className={className} />
   </LoaderContainer>
 );
 

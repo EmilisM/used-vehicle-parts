@@ -9,6 +9,8 @@ const colors = {
   ratingBadColor: "#EF6C00",
   ratingGoodColor: "#558B2F",
   ratingPerfectColor: "#0277BD",
+  errorBorder: "#b71c1c",
+  error: "#ffebee"
 };
 
 export default colors;

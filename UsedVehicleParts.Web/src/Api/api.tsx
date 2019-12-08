@@ -104,14 +104,40 @@ export interface SpecificationValueResponse extends SpecificationValue {
   id: number;
 }
 
-export interface Token {
+export interface TokenResponse {
   token: string;
 }
 
-export interface Login {
+export interface Error<T> {
+  errors: T;
+}
+
+export interface LoginRequest {
   email: string;
   password: string;
 }
+
+interface LoginErrors {
+  Form?: string[];
+  Email?: string[];
+  Password?: string[];
+}
+
+export interface SignUpRequest {
+  email: string;
+  password: string;
+  repeatPassword: string;
+}
+
+interface SignUpErrors {
+  Email?: string[];
+  Password?: string[];
+  RepeatPassword?: string[];
+}
+
+export interface SignUpError extends Error<SignUpErrors> {}
+
+export interface LoginError extends Error<LoginErrors> {}
 
 export const makeGetAll = (name?: string) => `/api/make?name=${name}`;
 
@@ -142,3 +168,7 @@ export const partGetAll = (
 
   return `/api/part?${nameRoute}${qualityGradeRoute}${partClassIdRoute}${trimIdRoute}`;
 };
+
+export const authPost = "/api/user/authentication";
+export const registrationPost = "/api/user/registration";
+export const userGet = "/api/user";

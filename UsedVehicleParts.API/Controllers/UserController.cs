@@ -74,7 +74,7 @@ namespace UsedVehicleParts.API.Controllers
         }
 
         [HttpPost("registration")]
-        public async Task<ActionResult<TokenModel>> Registrate([FromBody] LoginModel loginModel)
+        public async Task<ActionResult<TokenModel>> Registrate([FromBody] RegistrationModel registrationModel)
         {
             if (!ModelState.IsValid)
             {
@@ -83,7 +83,7 @@ namespace UsedVehicleParts.API.Controllers
 
             try
             {
-                var token = await _userService.RegistrateAsync(loginModel.Email, loginModel.Password);
+                var token = await _userService.RegistrateAsync(registrationModel.Email, registrationModel.Password);
 
                 var tokenModel = new TokenModel(token);
 

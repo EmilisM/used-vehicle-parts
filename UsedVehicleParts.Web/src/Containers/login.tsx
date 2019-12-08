@@ -1,6 +1,7 @@
-import React, { FormEvent, useState } from "react";
+import React, { FormEvent, useState, useEffect, useContext } from "react";
 import styled from "styled-components";
 import useFetch from "use-http";
+import { useHistory } from "react-router";
 
 import Card from "../Blocks/card";
 
@@ -17,7 +18,10 @@ import {
   SignUpRequest,
   registrationPost
 } from "../Api/api";
-import useLocalStorage from "../Hooks/useLocalStorage";
+import routes from "../Constants/routes";
+
+import { AppDispatchContext } from "../App";
+import { AppActions } from "../Reducers/app";
 
 const LoginStyled = styled.div`
   width: 100%;
@@ -73,7 +77,18 @@ const LoginPage = () => {
   const [fetchLoginRequest, fetchLoginResponse] = useFetch();
   const [fetchSignUpRequest, fetchSignUpResponse] = useFetch();
 
-  const setToken = useLocalStorage("token")[1];
+  const appDispatch = useContext(AppDispatchContext);
+
+  const history = useHistory();
+
+  const setSessionStorageToken = (token: string) => {
+    sessionStorage.setItem("token", token);
+  };
+
+  useEffect(() => {
+    sessionStorage.removeItem("token");
+    appDispatch(AppActions.setLogout());
+  }, [appDispatch]);
 
   async function loginSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -91,7 +106,9 @@ const LoginPage = () => {
     );
 
     if (fetchLoginResponse.ok) {
-      setToken(responseToken);
+      setSessionStorageToken(responseToken.token);
+      appDispatch(AppActions.setLogin());
+      history.push(routes.profile);
     } else {
       setLoginError(fetchLoginResponse.data);
     }
@@ -114,7 +131,9 @@ const LoginPage = () => {
     );
 
     if (fetchSignUpResponse.ok) {
-      setToken(responseToken);
+      setSessionStorageToken(responseToken.token);
+      appDispatch(AppActions.setLogin());
+      history.push(routes.profile);
     } else {
       setSignUpError(fetchSignUpResponse.data);
     }

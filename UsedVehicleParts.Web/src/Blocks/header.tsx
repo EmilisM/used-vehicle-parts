@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Fragment } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 
@@ -61,21 +61,32 @@ const HeaderTitle = () => (
   </HeaderTitleLinkStyled>
 );
 
-const HeaderItems = () => (
+interface HeaderProps {
+  isAuthorized: boolean;
+}
+
+const HeaderItems = ({ isAuthorized }: HeaderProps) => (
   <HeaderItemsStyled>
-    <HeaderItemLinkStyled to={routes.newPart}>
-      Submit new part
-    </HeaderItemLinkStyled>
-    <HeaderItemLinkStyled to={routes.login}>Login/Sign up</HeaderItemLinkStyled>
-    <HeaderItemLinkStyled to={routes.login}>Logout</HeaderItemLinkStyled>
-    <HeaderItemLinkStyled to={routes.profile}>Profile</HeaderItemLinkStyled>
+    {isAuthorized ? (
+      <Fragment>
+        <HeaderItemLinkStyled to={routes.newPart}>
+          Submit new part
+        </HeaderItemLinkStyled>
+        <HeaderItemLinkStyled to={routes.profile}>Profile</HeaderItemLinkStyled>
+        <HeaderItemLinkStyled to={routes.login}>Logout</HeaderItemLinkStyled>
+      </Fragment>
+    ) : (
+      <HeaderItemLinkStyled to={routes.login}>
+        Login/Sign up
+      </HeaderItemLinkStyled>
+    )}
   </HeaderItemsStyled>
 );
 
-const Header = () => (
+const Header = ({ isAuthorized }: HeaderProps) => (
   <HeaderStyled id="header">
     <HeaderTitle />
-    <HeaderItems />
+    <HeaderItems isAuthorized={isAuthorized} />
   </HeaderStyled>
 );
 

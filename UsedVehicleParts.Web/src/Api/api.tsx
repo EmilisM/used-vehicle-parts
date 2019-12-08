@@ -1,3 +1,5 @@
+export const BaseUrl = "http://85.206.134.3:7000/api";
+
 interface Make {
   name: string;
   yearFounded?: string;
@@ -58,9 +60,9 @@ export interface ImageResponse extends Image {
 }
 
 export interface User {
-  reputation?: number;
+  reputation?: string;
   email: string;
-  contactPhone: string;
+  contactPhone?: string;
 }
 
 interface Part {
@@ -139,15 +141,15 @@ export interface SignUpError extends Error<SignUpErrors> {}
 
 export interface LoginError extends Error<LoginErrors> {}
 
-export const makeGetAll = (name?: string) => `/api/make?name=${name}`;
+export const makeGetAll = (name?: string) => `/make?name=${name}`;
 
 export const modelGetAll = (name?: string, makeId?: number) =>
-  `/api/model?name=${name}&makeId=${makeId || ""}`;
+  `/model?name=${name}&makeId=${makeId || ""}`;
 
 export const trimGetAll = (name?: string, modelId?: number) =>
-  `/api/trim?name=${name}&modelId=${modelId || ""}`;
+  `/trim?name=${name}&modelId=${modelId || ""}`;
 
-export const partClassGetAll = (name?: string) => `/api/partclass?name=${name}`;
+export const partClassGetAll = (name?: string) => `/partclass?name=${name}`;
 
 export const partGetAll = (
   name?: string,
@@ -166,9 +168,9 @@ export const partGetAll = (
 
   const qualityGradeRoute = qualityGrade ? `&qualityGrade=${qualityGrade}` : "";
 
-  return `/api/part?${nameRoute}${qualityGradeRoute}${partClassIdRoute}${trimIdRoute}`;
+  return `/part?${nameRoute}${qualityGradeRoute}${partClassIdRoute}${trimIdRoute}`;
 };
 
-export const authPost = "/api/user/authentication";
-export const registrationPost = "/api/user/registration";
-export const userGet = "/api/user";
+export const authPost = "/user/authentication";
+export const registrationPost = "/user/registration";
+export const userGet = "/user";

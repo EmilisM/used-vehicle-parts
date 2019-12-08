@@ -7,9 +7,10 @@ interface InputProps {
   className?: string;
   placeholder?: string;
   value: string;
-  onChange: (event: ChangeEvent<HTMLInputElement>) => void;
+  onChange?: (event: ChangeEvent<HTMLInputElement>) => void;
   name?: string;
   type?: string;
+  disabled?: boolean;
 }
 
 const InputStyled = styled.input`
@@ -29,7 +30,8 @@ const Input = ({
   value,
   onChange,
   name,
-  type
+  type,
+  disabled
 }: InputProps) => (
   <InputStyled
     className={className}
@@ -38,6 +40,7 @@ const Input = ({
     onChange={onChange}
     name={name}
     type={type}
+    disabled={disabled}
   />
 );
 

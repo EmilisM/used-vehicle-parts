@@ -1,7 +1,7 @@
-import React, { useEffect, useReducer, Dispatch } from "react";
+import React, { useState, useEffect, useReducer, Dispatch } from "react";
 import styled from "styled-components";
-import { BrowserRouter } from "react-router-dom";
 import { Provider } from "use-http";
+import { Router as CustomRouter } from "react-router-dom";
 
 import Router from "./Router";
 import Header from "./Blocks/header";
@@ -17,6 +17,9 @@ import {
   AppAcceptedActions
 } from "./Reducers/app";
 
+import history from "./Constants/history";
+import Loader from "./Components/loader";
+
 const AppBase = styled.div`
   display: flex;
   flex-direction: column;
@@ -29,6 +32,14 @@ const Content = styled.div`
   margin-top: 56px;
 `;
 
+const LoaderContainer = styled.div`
+  display: flex;
+  width: 100%;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+`;
+
 export const AppStateContext = React.createContext<AppState>(initialState);
 export const AppDispatchContext = React.createContext<
   Dispatch<AppAcceptedActions>
@@ -36,10 +47,13 @@ export const AppDispatchContext = React.createContext<
 
 function App() {
   const [state, dispatch] = useReducer(reducer, initialState);
+  const [loading, setLoading] = useState(true);
   const token = sessionStorage.getItem("token");
 
   useEffect(() => {
     let isActive = true;
+
+    setLoading(true);
 
     if (token) {
       api
@@ -47,13 +61,20 @@ function App() {
         .then(() => {
           if (isActive) {
             dispatch(AppActions.setLogin());
+            setLoading(false);
           }
         })
         .catch(() => {
-          isActive && sessionStorage.removeItem("token");
+          if (isActive) {
+            sessionStorage.removeItem("token");
+            dispatch(AppActions.setLogout());
+            setLoading(false);
+          }
         });
     } else if (isActive) {
       sessionStorage.removeItem("token");
+      dispatch(AppActions.setLogout());
+      setLoading(false);
     }
 
     return () => {
@@ -61,8 +82,12 @@ function App() {
     };
   }, [token]);
 
-  return (
-    <BrowserRouter>
+  return loading ? (
+    <LoaderContainer>
+      <Loader />
+    </LoaderContainer>
+  ) : (
+    <CustomRouter history={history}>
       <AppDispatchContext.Provider value={dispatch}>
         <AppStateContext.Provider value={state}>
           <Provider url={BaseUrl}>
@@ -76,7 +101,7 @@ function App() {
           </Provider>
         </AppStateContext.Provider>
       </AppDispatchContext.Provider>
-    </BrowserRouter>
+    </CustomRouter>
   );
 }
 

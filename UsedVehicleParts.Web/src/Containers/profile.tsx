@@ -45,15 +45,12 @@ const Profile = () => {
 
     setLoading(true);
 
-    api
-      .get(userGet)
-      .then(({ data }: { data: User }) => {
-        if (isActive) {
-          setUser(data);
-          setLoading(false);
-        }
-      })
-      .catch(err => console.log(err));
+    api.get(userGet).then(({ data }: { data: User }) => {
+      if (isActive) {
+        setUser(data);
+        setLoading(false);
+      }
+    });
 
     return () => {
       isActive = false;

@@ -23,7 +23,7 @@ const LoaderStyled = styled(Loader)`
 interface ButtonProps {
   label: string;
   className?: string;
-  loading: boolean;
+  loading?: boolean;
 }
 
 const Button = ({ label, className, loading }: ButtonProps) => {

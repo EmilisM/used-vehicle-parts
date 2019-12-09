@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -58,6 +59,13 @@ namespace UsedVehicleParts.API.Controllers
         [Authorize]
         public async Task<ActionResult<Part>> Post([FromBody] Part entity)
         {
+            var userId = HttpContext.User.Claims.FirstOrDefault(claim => claim.Type == ClaimTypes.NameIdentifier);
+
+            if (userId != null)
+            {
+                entity.SellerId = int.Parse(userId.Value);
+            }
+
             if (!ModelState.IsValid)
             {
                 return BadRequest();

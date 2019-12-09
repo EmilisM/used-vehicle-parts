@@ -7,21 +7,21 @@ import { PartClassOption, Nullable } from "../Reducers/home";
 
 import BaseDropdownStyled from "./baseDropdown";
 
-interface PartClassDropdownProps {
+interface PartClassesDropdownProps {
   className?: string;
-  value: Nullable<PartClassOption>;
-  onChange: (value: PartClassOption) => void;
+  value: Nullable<PartClassOption[]>;
+  onChange: (value: PartClassOption[]) => void;
 }
 
-function PartClassDropdownStyled(props: Props<PartClassOption>) {
+function PartClassesDropdownStyled(props: Props<PartClassOption>) {
   return <BaseDropdownStyled {...props} />;
 }
 
-const PartClassDropdown = ({
+const PartClassesDropdown = ({
   className,
   value,
   onChange
-}: PartClassDropdownProps) => {
+}: PartClassesDropdownProps) => {
   const { get } = useFetch();
 
   const loadOptions = (inputValue: string) =>
@@ -41,17 +41,18 @@ const PartClassDropdown = ({
     });
 
   return (
-    <PartClassDropdownStyled
+    <PartClassesDropdownStyled
       className={className}
-      classNamePrefix="part-class-dropdown"
+      classNamePrefix="part-classes-dropdown"
       loadOptions={loadOptions}
       openMenuOnFocus={false}
       openMenuOnClick={false}
       isClearable
+      isMulti
       value={value}
-      onChange={value => onChange(value as PartClassOption)}
+      onChange={value => onChange(value as PartClassOption[])}
     />
   );
 };
 
-export default PartClassDropdown;
+export default PartClassesDropdown;

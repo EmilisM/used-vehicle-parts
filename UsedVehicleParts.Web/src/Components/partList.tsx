@@ -134,7 +134,9 @@ const PartList = ({ parts, loading }: PartListProps) =>
               <PartListItemImage src={part.image.imageUrl} alt="logo" />
             </PartListItemImageContainer>
             <PartListItemContent>
-              <PartListItemContentName>{part.name}</PartListItemContentName>
+              <PartListItemContentName>
+                {part.name}, {part.partNumber}
+              </PartListItemContentName>
               <PartListItemContentDetails>
                 <PartListItemContentDetailsSpecs>
                   <PartListItemContentDetailsManufacturer>

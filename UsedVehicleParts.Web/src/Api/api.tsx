@@ -1,5 +1,9 @@
 export const BaseUrl = "http://85.206.134.3:7000/api";
 
+export interface Error<T> {
+  errors: T;
+}
+
 interface Make {
   name: string;
   yearFounded?: string;
@@ -86,7 +90,30 @@ interface Part {
   trim: Trim;
 }
 
-export interface PartRequest extends Part {}
+export interface PartRequest {
+  name: string;
+  manufacturer?: string;
+  qualityGrade: number;
+  price: number;
+  priceUnits?: string;
+  partNumber?: string;
+  partClassId: number;
+  trimId: number;
+  image: Image;
+}
+
+export interface PartErrors {
+  Name?: string[];
+  PartNumber?: string[];
+  Manufacturer?: string[];
+  PriceUnits?: string[];
+  price?: string[];
+  qualityGrade?: string[],
+}
+
+export interface PartError extends Error<PartErrors> {
+
+}
 
 export interface PartResponse extends Part {
   id: number;
@@ -108,10 +135,6 @@ export interface SpecificationValueResponse extends SpecificationValue {
 
 export interface TokenResponse {
   token: string;
-}
-
-export interface Error<T> {
-  errors: T;
 }
 
 export interface LoginRequest {
@@ -174,3 +197,4 @@ export const partGetAll = (
 export const authPost = "/user/authentication";
 export const registrationPost = "/user/registration";
 export const userGet = "/user";
+export const partPost = "/part";

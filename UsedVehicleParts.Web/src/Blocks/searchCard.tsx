@@ -14,8 +14,8 @@ import InputTitle from "../Components/inputTitle";
 import Input from "../Components/input";
 import MakeDropdown from "../Components/makeDropdown";
 import ModelDropdown from "../Components/modelDropdown";
-import TrimDropdown from "../Components/trimDropdown";
-import PartClassDropdown from "../Components/partClassDropdown";
+import TrimsDropdown from "../Components/trimsDropdown";
+import PartClassesDropdown from "../Components/partClassesDropdown";
 
 import Card from "./card";
 
@@ -36,7 +36,7 @@ const ModelDropdownStyled = styled(ModelDropdown)`
   ${fieldStyle}
 `;
 
-const TrimDropdownStyled = styled(TrimDropdown)`
+const TrimsDropdownStyled = styled(TrimsDropdown)`
   ${fieldStyle}
 `;
 
@@ -48,7 +48,7 @@ const PartClassContainer = styled.div`
   margin-top: 30px;
 `;
 
-const PartClassDropdownStyled = styled(PartClassDropdown)`
+const PartClassesDropdownStyled = styled(PartClassesDropdown)`
   ${fieldStyle}
 `;
 
@@ -97,11 +97,11 @@ const SearchCard = ({
         <TitleStyled>Model</TitleStyled>
         <ModelDropdownStyled value={model} onChange={setModel} make={make} />
         <TitleStyled>Trims</TitleStyled>
-        <TrimDropdownStyled value={trims} onChange={setTrims} model={model} />
+        <TrimsDropdownStyled value={trims} onChange={setTrims} model={model} />
       </div>
       <PartClassContainer>
         <InputTitle>Part classes</InputTitle>
-        <PartClassDropdownStyled
+        <PartClassesDropdownStyled
           value={partClasses}
           onChange={setPartClasses}
         />

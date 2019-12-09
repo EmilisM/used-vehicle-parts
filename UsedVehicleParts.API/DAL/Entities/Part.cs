@@ -1,16 +1,23 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace UsedVehicleParts.API.DAL.Entities
 {
     public class Part : Entity
     {
+        [Required]
         public string Name { get; set; }
         public DateTime? ProductionYearStart { get; set; }
         public DateTime? ProductionYearEnd { get; set; }
+        [Required]
         public string Manufacturer { get; set; }
+        [Required]
         public int QualityGrade { get; set; }
+        [Required]
         public int Price { get; set; }
+        [Required]
         public string PriceUnits { get; set; }
+        [Required]
         public string PartNumber { get; set; }
         public int PartClassId { get; set; }
         public int ImageId { get; set; }

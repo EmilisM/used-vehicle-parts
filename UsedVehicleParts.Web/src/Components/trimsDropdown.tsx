@@ -12,23 +12,23 @@ import {
 
 import BaseDropdownStyled from "./baseDropdown";
 
-interface TrimDropdownProps {
+interface TrimsDropdownProps {
   className?: string;
-  value: Nullable<TrimOption>;
-  onChange: (value: TrimOption) => void;
+  value: Nullable<TrimOption[]>;
+  onChange: (value: TrimOption[]) => void;
   model: Nullable<ModelOption>;
 }
 
-function TrimDropdownStyled(props: Props<MakeOption>) {
+function TrimsDropdownStyled(props: Props<MakeOption>) {
   return <BaseDropdownStyled {...props} />;
 }
 
-const TrimDropdown = ({
+const TrimsDropdown = ({
   className,
   value,
   onChange,
   model
-}: TrimDropdownProps) => {
+}: TrimsDropdownProps) => {
   const { get } = useFetch();
 
   const loadOptions = (inputValue: string) =>
@@ -50,18 +50,19 @@ const TrimDropdown = ({
     });
 
   return (
-    <TrimDropdownStyled
+    <TrimsDropdownStyled
       className={className}
       classNamePrefix="trim-dropdown"
       loadOptions={loadOptions}
       openMenuOnFocus={false}
       openMenuOnClick={false}
       isClearable
+      isMulti
       value={value}
-      onChange={value => onChange(value as TrimOption)}
+      onChange={value => onChange(value as TrimOption[])}
       isDisabled={!model}
     />
   );
 };
 
-export default TrimDropdown;
+export default TrimsDropdown;

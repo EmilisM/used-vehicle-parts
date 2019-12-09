@@ -32,7 +32,7 @@ namespace UsedVehicleParts.API
             services.AddCors(options =>
             {
                 options.AddPolicy(_specificOrigins,
-                    builder => { builder.WithOrigins("http://85.206.134.3", "http://localhost:3000").AllowAnyHeader().AllowAnyMethod(); });
+                    builder => { builder.WithOrigins("http://85.206.134.3:7001", "http://localhost:3000").AllowAnyHeader().AllowAnyMethod(); });
             });
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);

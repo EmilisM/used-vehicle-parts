@@ -28,12 +28,8 @@ const PartListItem = styled.div`
   }
 `;
 
-const PartListItemImageContainer = styled.div`
-  display: flex;
-`;
-
 const PartListItemImage = styled.img`
-  width: 250px;
+  max-width: 200px;
   height: auto;
 `;
 
@@ -130,9 +126,7 @@ const PartList = ({ parts, loading }: PartListProps) =>
           <PartListItem
             key={`${part.partNumber}-${part.name}-${part.qualityGrade}`}
           >
-            <PartListItemImageContainer>
-              <PartListItemImage src={part.image.imageUrl} alt="logo" />
-            </PartListItemImageContainer>
+            <PartListItemImage src={part.image.imageUrl} alt="logo" />
             <PartListItemContent>
               <PartListItemContentName>
                 {part.name}, {part.partNumber}

@@ -27,17 +27,30 @@ const LoginStyled = styled.div`
   width: 100%;
   display: flex;
   justify-content: center;
+
+  @media (max-width: 768px) {
+    flex-wrap: wrap;
+  }
 `;
 
 const FirstColumn = styled.div`
-  max-width: 500px;
+  @media (min-width: 768px) {
+    max-width: 500px;
+  }
+
   width: 100%;
 `;
 
 const SecondColumn = styled.div`
-  margin-left: 40px
-  max-width: 500px;
-  width: 100%
+  @media (min-width: 768px) {
+    margin-left: 40px
+    max-width: 500px;
+  }
+  @media (max-width: 768px) {
+    margin-top: 20px;
+  }
+
+  width: 100%;
 `;
 
 const fieldStyle = `

@@ -21,16 +21,31 @@ const HomeStyled = styled.div`
   width: 100%;
   display: flex;
   justify-content: center;
+
+  @media (max-width: 981px) {
+    flex-wrap: wrap;
+  }
 `;
 
 const FirstColumn = styled.div`
-  max-width: 400px;
+  @media (min-width: 981px) {
+    max-width: 400px;
+  }
+
   width: 100%;
 `;
 
 const SecondColumn = styled.div`
-  margin-left: 40px
-  max-width: 1000px;
+  @media (min-width: 981px) {
+    margin-left: 40px
+    max-width: 1000px;
+  }
+
+  @media (max-width: 980px) {
+    flex-wrap: wrap;
+    margin-top: 20px;
+  }
+
   width: 100%
 `;
 
